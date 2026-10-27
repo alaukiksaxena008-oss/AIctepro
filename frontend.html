@@ -199,15 +199,33 @@
                                 <i class="fa-solid fa-cloud-arrow-up text-indigo-600 mr-2"></i>
                                 Step 2: Upload Student Sheet
                             </h3>
-                            <button onclick="loadExampleData()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded transition">
-                                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Fill Prompt Example
-                            </button>
+                            <div class="flex space-x-1">
+                                <a href="/api/download/sample-excel" download class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded transition border border-emerald-200 flex items-center">
+                                    <i class="fa-solid fa-file-excel mr-1"></i> Excel (.xlsx)
+                                </a>
+                                <button type="button" onclick="loadExampleData()" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded transition border border-indigo-200 flex items-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Quick Fill
+                                </button>
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-500">
-                            Paste TSV/CSV format: <code>apaar_id, name, course, seat_category</code>. Files enter a <strong>staging area</strong> first; nothing touches the official student table until validation passes.
-                        </p>
 
-                        <textarea id="upload-data" rows="8" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="apaar_id,name,course,seat_category
+                        <!-- File Input / Drag & Drop -->
+                        <div class="p-3 border-2 border-dashed border-slate-200 rounded-lg hover:border-indigo-400 bg-slate-50 transition flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-file-arrow-up text-indigo-500 text-lg"></i>
+                                <div>
+                                    <label for="file-upload-input" class="cursor-pointer font-semibold text-indigo-600 hover:underline">Choose .xlsx or .csv</label>
+                                    <p class="text-[11px] text-slate-400" id="file-name-display">No file selected</p>
+                                </div>
+                            </div>
+                            <input type="file" id="file-upload-input" accept=".xlsx,.csv,.tsv" onchange="handleFileSelect(event)" class="hidden">
+                        </div>
+
+                        <div class="relative text-center">
+                            <span class="bg-white px-2 text-[11px] text-slate-400 uppercase font-semibold">Or paste rows directly</span>
+                        </div>
+
+                        <textarea id="upload-data" rows="6" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="apaar_id,name,course,seat_category
 482910563721,Aarav Sharma,B.Tech,General
 ..."></textarea>
 
@@ -606,11 +624,24 @@
             document.getElementById('row-count-preview').innerText = "Loaded 6 test rows (includes format error, duplicate, registry missing, dual-enrolment)";
         }
 
+        let selectedUploadFile = null;
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedUploadFile = file;
+                document.getElementById('file-name-display').innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                document.getElementById('row-count-preview').innerText = `File ready: ${file.name}`;
+                // Clear text area to prevent conflict
+                document.getElementById('upload-data').value = "";
+            }
+        }
+
         // --- STEP 2: UPLOAD BATCH TO STAGING ---
         async function submitBatch() {
             const raw = document.getElementById('upload-data').value.trim();
-            if (!raw) {
-                alert("Please enter or paste student rows first!");
+            if (!raw && !selectedUploadFile) {
+                alert("Please select a file (.xlsx/.csv) or paste student rows first!");
                 return;
             }
 
@@ -621,7 +652,12 @@
             formData.append('institute_id', instId);
             formData.append('academic_year', '2026-27');
             formData.append('uploaded_by', userEmail);
-            formData.append('file_content', raw);
+            
+            if (selectedUploadFile) {
+                formData.append('file', selectedUploadFile);
+            } else {
+                formData.append('file_content', raw);
+            }
 
             const btn = document.getElementById('btn-submit-batch');
             btn.disabled = true;

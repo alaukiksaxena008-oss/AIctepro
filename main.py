@@ -4,7 +4,7 @@ import uuid
 import sqlite3
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from pydantic import BaseModel
 from db import get_connection, init_db
 
@@ -117,6 +117,26 @@ def get_institute_dashboard(institute_id: str):
         "students": [dict(s) for s in students]
     }
 
+@app.get("/api/download/sample-excel")
+def download_sample_excel():
+    if not os.path.exists("pune_college_students.xlsx"):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(
+        "pune_college_students.xlsx", 
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        filename="pune_college_students.xlsx"
+    )
+
+@app.get("/api/download/sample-csv")
+def download_sample_csv():
+    if not os.path.exists("pune_college_students.csv"):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(
+        "pune_college_students.csv", 
+        media_type="text/csv", 
+        filename="pune_college_students.csv"
+    )
+
 @app.get("/api/batches/{batch_id}")
 def get_batch_details(batch_id: str):
     conn = get_connection()
@@ -151,8 +171,22 @@ async def upload_student_data(
 
     raw_text = ""
     if file:
+        filename = (file.filename or "").lower()
         content_bytes = await file.read()
-        raw_text = content_bytes.decode("utf-8", errors="replace")
+        if filename.endswith(".xlsx"):
+            import io
+            import openpyxl
+            wb = openpyxl.load_workbook(io.BytesIO(content_bytes), data_only=True)
+            ws = wb.active
+            rows_list = []
+            for row in ws.iter_rows(values_only=True):
+                if any(row):
+                    # take first 4 columns: apaar_id, name, course, seat_category
+                    row_vals = [str(c).strip() if c is not None else "" for c in row[:4]]
+                    rows_list.append(",".join(row_vals))
+            raw_text = "\n".join(rows_list)
+        else:
+            raw_text = content_bytes.decode("utf-8", errors="replace")
     elif file_content:
         raw_text = file_content
     else:
