@@ -237,14 +237,18 @@
             <!-- Quick Demo One-Click Fill -->
             <div class="pt-4 border-t border-slate-100">
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center mb-3">One-Click Demonstration Logins</p>
-                <div class="grid grid-cols-2 gap-2.5 text-xs">
-                    <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-3 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
-                        <span class="font-bold text-slate-800 group-hover:text-emerald-900 block">Pune College of Tech</span>
-                        <span class="text-slate-500 text-[11px]">ID: PCT01 • College Admin</span>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-2.5 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
+                        <span class="font-bold text-slate-800 group-hover:text-emerald-900 block truncate">Pune College Tech</span>
+                        <span class="text-slate-500 text-[10px]">PCT01 (60 cap)</span>
                     </button>
-                    <button type="button" onclick="quickLogin('aicte_officer', 'aicte123')" class="p-3 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-amber-50 hover:border-amber-300 text-left transition group">
-                        <span class="font-bold text-slate-800 group-hover:text-amber-900 block">AICTE Central Officer</span>
-                        <span class="text-slate-500 text-[11px]">Apex Governance View</span>
+                    <button type="button" onclick="quickLogin('coep_admin', 'coep123')" class="p-2.5 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
+                        <span class="font-bold text-slate-800 group-hover:text-emerald-900 block truncate">COEP Pune</span>
+                        <span class="text-slate-500 text-[10px]">COEP02 (120 cap)</span>
+                    </button>
+                    <button type="button" onclick="quickLogin('aicte_officer', 'aicte123')" class="p-2.5 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-amber-50 hover:border-amber-300 text-left transition group">
+                        <span class="font-bold text-slate-800 group-hover:text-amber-900 block truncate">AICTE Officer</span>
+                        <span class="text-slate-500 text-[10px]">Apex Regulator</span>
                     </button>
                 </div>
             </div>
@@ -628,14 +632,17 @@
 
                             <!-- Preset Selectors -->
                             <div class="bg-slate-100 p-1 rounded-2xl flex items-center space-x-1 text-xs">
-                                <button onclick="loadCleanTestData()" class="px-3 py-1.5 rounded-xl font-bold transition bg-white shadow-sm text-emerald-800">
-                                    Clean Test CSV
+                                <button onclick="loadCOEPTestData()" class="px-3 py-1.5 rounded-xl font-bold transition bg-white shadow-sm text-emerald-800" title="Load 2 students batch">
+                                    2-Student CSV
+                                </button>
+                                <button onclick="loadCleanTestData()" class="px-3 py-1.5 rounded-xl font-medium transition text-slate-600 hover:text-slate-900">
+                                    4 Students
                                 </button>
                                 <button onclick="loadExampleData()" class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800">
                                     Error Demo
                                 </button>
-                                <a href="/api/download/sample-excel" download class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800 flex items-center">
-                                    <i class="fa-solid fa-download mr-1 text-[10px]"></i> Excel
+                                <a href="/api/download/coep-csv" download class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800 flex items-center" title="Download 2-student CSV">
+                                    <i class="fa-solid fa-download mr-1 text-[10px]"></i> CSV
                                 </a>
                             </div>
                         </div>
@@ -1112,6 +1119,18 @@
 445566778899,Priya Nair,B.Tech,NRI`;
             document.getElementById('upload-data').value = cleanSample;
             document.getElementById('row-count-preview').innerText = "Loaded 4 fresh, clean students ready to verify and commit";
+            selectedUploadFile = null;
+            document.getElementById('file-name-display').innerText = "No file selected (using text)";
+        }
+
+        function loadCOEPTestData() {
+            setTab('college');
+            const coepSample = 
+`apaar_id,name,course,seat_category
+554433221100,Ishaan Joshi,B.Tech,General
+665544332211,Riya Sengupta,B.Tech,NRI`;
+            document.getElementById('upload-data').value = coepSample;
+            document.getElementById('row-count-preview').innerText = "Loaded 2 clean students for COEP02 (Ishaan & Riya)";
             selectedUploadFile = null;
             document.getElementById('file-name-display').innerText = "No file selected (using text)";
         }

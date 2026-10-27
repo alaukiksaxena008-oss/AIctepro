@@ -153,14 +153,24 @@ def init_db():
             ('889900112233', 'Sneha Kulkarni', 'F', '2005-07-21'),
             ('223344556677', 'Rahul Deshmukh', 'M', '2004-12-05'),
             ('445566778899', 'Priya Nair', 'F', '2005-05-18'),
-            ('778899001122', 'Tanvi Joshi', 'F', '2005-10-09')
+            ('778899001122', 'Tanvi Joshi', 'F', '2005-10-09'),
+            ('554433221100', 'Ishaan Joshi', 'M', '2005-02-17'),
+            ('665544332211', 'Riya Sengupta', 'F', '2005-06-25'),
+            ('776655443322', 'Nikhil Rao', 'M', '2004-09-11')
         ])
 
-        # Seed existing active student in COEP02 (to demonstrate dual enrolment detection)
-        cursor.execute("""
+        # Seed existing active students in COEP02 and PCT01
+        cursor.executemany("""
         INSERT INTO students (apaar_id, institute_id, name, course, seat_category, academic_year, batch_id)
-        VALUES ('334455667788', 'COEP02', 'Vikram Malhotra', 'B.Tech', 'General', '2026-27', 'BATCH-INIT-001');
-        """)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
+        """, [
+            ('334455667788', 'COEP02', 'Vikram Malhotra', 'B.Tech', 'General', '2026-27', 'BATCH-INIT-001'),
+            ('556677889900', 'COEP02', 'Sameer Verma', 'B.Tech', 'General', '2026-27', 'BATCH-INIT-001'),
+            ('112233445566', 'COEP02', 'Kavita Pillai', 'B.Tech', 'OBC', '2026-27', 'BATCH-INIT-001'),
+            ('998877665544', 'COEP02', 'Ananya Iyer', 'B.Tech', 'General', '2026-27', 'BATCH-INIT-001'),
+            ('482910563721', 'PCT01', 'Aarav Sharma', 'B.Tech', 'General', '2026-27', 'BATCH-INIT-002'),
+            ('771203948856', 'PCT01', 'Rohan Das', 'B.Tech', 'NRI', '2026-27', 'BATCH-INIT-002')
+        ])
 
     conn.commit()
     conn.close()
