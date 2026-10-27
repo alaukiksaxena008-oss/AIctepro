@@ -74,6 +74,73 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #a3c2a8;
         }
+
+        /* DARK THEME SYSTEM */
+        html.dark body {
+            background: radial-gradient(circle at 10% 20%, #0d1712 0%, #070d0a 100%) !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark #screen-app, html.dark #screen-login {
+            background-color: #121c16 !important;
+            border-color: #21352a !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark aside {
+            background-color: #15221b !important;
+            border-color: #21352a !important;
+        }
+        html.dark .bg-white {
+            background-color: #18271f !important;
+            border-color: #263e30 !important;
+            color: #f1f5f9 !important;
+        }
+        html.dark .bg-slate-50, html.dark .bg-slate-50\/70, html.dark .bg-slate-50\/80 {
+            background-color: #132019 !important;
+            border-color: #21352a !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark .bg-slate-100 {
+            background-color: #1f3328 !important;
+            color: #cbd5e1 !important;
+        }
+        html.dark .text-slate-900, html.dark .text-slate-800 {
+            color: #f8fafc !important;
+        }
+        html.dark .text-slate-700, html.dark .text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        html.dark .text-slate-500, html.dark .text-slate-400 {
+            color: #8da496 !important;
+        }
+        html.dark .border-slate-200, html.dark .border-slate-200\/80, html.dark .border-slate-200\/60, html.dark .border-slate-100 {
+            border-color: #23392c !important;
+        }
+        html.dark thead.bg-slate-50, html.dark thead.bg-slate-100 {
+            background-color: #132019 !important;
+            color: #8da496 !important;
+        }
+        html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #21352a !important;
+        }
+        html.dark input, html.dark textarea {
+            background-color: #111b15 !important;
+            color: #f8fafc !important;
+            border-color: #284233 !important;
+        }
+        html.dark .bg-peach-100 {
+            background-color: #3b2518 !important;
+        }
+        html.dark .text-peach-600, html.dark .text-peach-500 {
+            color: #fca574 !important;
+        }
+        html.dark #btn-theme-dark {
+            background-color: #2d583e !important;
+            color: #ffffff !important;
+        }
+        html.dark #btn-theme-light {
+            background-color: transparent !important;
+            color: #8da496 !important;
+        }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen p-3 md:p-6 flex items-center justify-center">
@@ -286,46 +353,160 @@
                 </div>
 
                 <!-- Right Pill Search & Profile Bar -->
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div class="relative flex flex-wrap items-center gap-2.5">
                     
-                    <!-- Search Input -->
-                    <div class="relative bg-white rounded-full shadow-sm px-3.5 py-1.5 flex items-center border border-slate-200/60 text-xs w-48 sm:w-64">
+                    <!-- 1. Interactive Search Input -->
+                    <div class="relative bg-white rounded-full shadow-sm px-3.5 py-1.5 flex items-center border border-slate-200/60 text-xs w-48 sm:w-64 transition-all focus-within:w-72 focus-within:ring-2 focus-within:ring-emerald-600">
                         <i class="fa-solid fa-magnifying-glass text-slate-400 mr-2 text-xs"></i>
                         <input type="text" id="global-search" oninput="handleSearch(event)" placeholder="Search student or APAAR..." class="w-full bg-transparent focus:outline-none text-slate-700 placeholder-slate-400">
+                        <button id="search-clear-btn" onclick="clearSearch()" class="hidden text-slate-400 hover:text-slate-600 ml-1">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
                     </div>
 
-                    <!-- Voice Icon Pill -->
-                    <button class="w-9 h-9 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-500 hover:text-emerald-700 transition">
-                        <i class="fa-solid fa-microphone text-xs"></i>
-                    </button>
+                    <!-- 2. Voice Search Mic Pill -->
+                    <div class="relative">
+                        <button id="btn-voice-search" onclick="toggleVoiceSearch()" title="Voice Search (Click and speak)" class="w-9 h-9 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-500 hover:text-emerald-700 hover:border-emerald-300 transition">
+                            <i class="fa-solid fa-microphone text-xs" id="voice-mic-icon"></i>
+                        </button>
+                        <!-- Voice Toast Indicator -->
+                        <div id="voice-toast" class="hidden absolute top-12 left-1/2 -translate-x-1/2 z-50 whitespace-nowrap bg-slate-900 text-white text-[11px] font-semibold px-3 py-1.5 rounded-full shadow-xl flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                            <span id="voice-toast-msg">Listening... Speak now</span>
+                        </div>
+                    </div>
 
-                    <!-- Theme Toggle -->
+                    <!-- 3. Day / Night Theme Toggle -->
                     <div class="bg-white rounded-full shadow-sm border border-slate-200/60 p-1 flex items-center space-x-1">
-                        <button class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 text-xs shadow-inner">
-                            <i class="fa-regular fa-sun"></i>
+                        <button id="btn-theme-light" onclick="setTheme('light')" title="Light Theme" class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 text-xs shadow-inner transition">
+                            <i class="fa-solid fa-sun"></i>
                         </button>
-                        <button class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 text-xs hover:text-slate-600">
-                            <i class="fa-regular fa-moon"></i>
+                        <button id="btn-theme-dark" onclick="setTheme('dark')" title="Dark Theme" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 text-xs hover:text-slate-600 transition">
+                            <i class="fa-solid fa-moon"></i>
                         </button>
                     </div>
 
-                    <!-- Notification Bell -->
-                    <button class="w-9 h-9 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-500 hover:text-emerald-700 relative transition">
-                        <i class="fa-regular fa-bell text-xs"></i>
-                        <span class="w-2 h-2 rounded-full bg-amber-500 absolute top-2 right-2 ring-2 ring-white"></span>
-                    </button>
+                    <!-- 4. Notification Bell & Popover -->
+                    <div class="relative">
+                        <button id="btn-notification-bell" onclick="toggleNotificationDropdown()" title="Notifications" class="w-9 h-9 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-500 hover:text-emerald-700 relative transition">
+                            <i class="fa-regular fa-bell text-xs"></i>
+                            <span id="notification-badge-dot" class="w-2.5 h-2.5 rounded-full bg-amber-500 absolute top-1.5 right-1.5 ring-2 ring-white"></span>
+                        </button>
 
-                    <!-- User Profile Pill -->
-                    <div class="bg-white rounded-full shadow-sm border border-slate-200/60 pl-1.5 pr-3 py-1 flex items-center space-x-2">
-                        <div class="w-7 h-7 rounded-full bg-emerald-800 text-white flex items-center justify-center font-bold text-xs" id="nav-avatar">
-                            PJ
+                        <!-- Notification Dropdown Menu -->
+                        <div id="dropdown-notifications" class="hidden absolute right-0 top-12 z-50 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200/90 p-4 space-y-3">
+                            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider">System Alerts</h4>
+                                    <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full" id="unread-count-badge">3 New</span>
+                                </div>
+                                <button onclick="markAllNotificationsRead()" class="text-[11px] font-semibold text-emerald-700 hover:underline">
+                                    Mark all read
+                                </button>
+                            </div>
+
+                            <div class="space-y-2.5 text-xs max-h-72 overflow-y-auto custom-scrollbar" id="notification-items-container">
+                                <!-- Item 1: High Priority Flag -->
+                                <div class="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200/60 flex items-start space-x-2.5">
+                                    <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-triangle-exclamation text-xs"></i>
+                                    </div>
+                                    <div class="space-y-0.5">
+                                        <p class="font-bold text-amber-950">Dual Enrolment Alert</p>
+                                        <p class="text-[11px] text-amber-900 leading-snug">Student Vikram Malhotra (APAAR: 334455667788) flagged active at COEP02.</p>
+                                        <span class="text-[10px] text-amber-700">10 mins ago • AICTE Cross Check</span>
+                                    </div>
+                                </div>
+
+                                <!-- Item 2: Quota Status -->
+                                <div class="p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200/60 flex items-start space-x-2.5">
+                                    <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-chair text-xs"></i>
+                                    </div>
+                                    <div class="space-y-0.5">
+                                        <p class="font-bold text-emerald-950">Approved Intake Capacity</p>
+                                        <p class="text-[11px] text-emerald-900 leading-snug">Pune College of Technology has 54 of 60 seats remaining (10% filled).</p>
+                                        <span class="text-[10px] text-emerald-700">Today • Academic Window 2026-27</span>
+                                    </div>
+                                </div>
+
+                                <!-- Item 3: Window Open Notice -->
+                                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-start space-x-2.5">
+                                    <div class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+                                        <i class="fa-solid fa-calendar-check text-xs"></i>
+                                    </div>
+                                    <div class="space-y-0.5">
+                                        <p class="font-bold text-slate-800">Submission Window Active</p>
+                                        <p class="text-[11px] text-slate-600 leading-snug">AICTE data gateway is currently open for batch uploads.</p>
+                                        <span class="text-[10px] text-slate-400">AY 2026-27</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-left text-xs leading-tight pr-1">
-                            <span class="font-bold text-slate-800 block truncate max-w-[110px]" id="nav-user-name">Prof. S. Joshi</span>
-                            <span class="text-[10px] text-slate-400 block" id="nav-inst-id">PCT01</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
                     </div>
+
+                    <!-- 5. User Profile Pill & Dropdown -->
+                    <div class="relative">
+                        <button id="btn-profile-pill" onclick="toggleProfileDropdown()" title="User Profile & Session Details" class="bg-white rounded-full shadow-sm border border-slate-200/60 pl-1.5 pr-3 py-1 flex items-center space-x-2 hover:border-emerald-300 transition cursor-pointer">
+                            <div class="w-7 h-7 rounded-full bg-emerald-800 text-white flex items-center justify-center font-bold text-xs shadow-sm" id="nav-avatar">
+                                PJ
+                            </div>
+                            <div class="text-left text-xs leading-tight pr-1">
+                                <span class="font-bold text-slate-800 block truncate max-w-[120px]" id="nav-user-name">Prof. S. Joshi</span>
+                                <span class="text-[10px] text-slate-400 block" id="nav-inst-id">PCT01</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-400" id="profile-chevron"></i>
+                        </button>
+
+                        <!-- Profile Popover Dropdown -->
+                        <div id="dropdown-profile" class="hidden absolute right-0 top-12 z-50 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200/90 p-4 space-y-4">
+                            <!-- User Card -->
+                            <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-800 to-amber-600 text-white flex items-center justify-center font-bold text-sm shadow-md" id="dropdown-avatar">
+                                    PJ
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h4 class="font-extrabold text-slate-900 text-xs truncate" id="dropdown-user-name">Prof. S. Joshi (PCT Dean)</h4>
+                                    <span class="inline-block bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5" id="dropdown-role-badge">College Admin</span>
+                                </div>
+                            </div>
+
+                            <!-- Session Meta -->
+                            <div class="space-y-1.5 text-xs text-slate-600">
+                                <div class="flex justify-between py-1 border-b border-slate-50">
+                                    <span class="text-slate-400">Bound Institute:</span>
+                                    <span class="font-bold text-slate-800" id="dropdown-inst-code">PCT01</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-slate-50">
+                                    <span class="text-slate-400">Academic Window:</span>
+                                    <span class="font-bold text-emerald-700">AY 2026-27</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-slate-50">
+                                    <span class="text-slate-400">Quota Cap:</span>
+                                    <span class="font-bold text-slate-800" id="dropdown-quota">60 Seats</span>
+                                </div>
+                            </div>
+
+                            <!-- Quick Switch Tenant Actions -->
+                            <div class="space-y-1.5 pt-1">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch Demonstration Account</p>
+                                <button onclick="quickLogin('coep_admin', 'coep123')" class="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 text-xs transition">
+                                    <span class="font-semibold text-slate-800">Switch to COEP02</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                                </button>
+                                <button onclick="quickLogin('aicte_officer', 'aicte123')" class="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200/60 text-xs transition">
+                                    <span class="font-semibold text-slate-800">Switch to AICTE Officer</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                                </button>
+                            </div>
+
+                            <!-- Logout -->
+                            <button onclick="logout()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-2 rounded-xl text-xs transition flex items-center justify-center">
+                                <i class="fa-solid fa-right-from-bracket mr-2"></i> Log Out
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -1234,18 +1415,196 @@
             }
         }
 
-        // Filter / Search in committed table
+        // ==============================================
+        // TOP PILL CONTROLS INTERACTIVE LOGIC
+        // ==============================================
+
+        // 1. SEARCH FILTER & CLEAR
         function handleSearch(e) {
-            const term = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('#committed-table-body tr');
-            rows.forEach(r => {
+            const term = (e ? e.target.value : document.getElementById('global-search').value).toLowerCase().trim();
+            const clearBtn = document.getElementById('search-clear-btn');
+            
+            if (clearBtn) {
+                clearBtn.classList.toggle('hidden', term.length === 0);
+            }
+
+            // Filter Canonical Students Table
+            const canonicalRows = document.querySelectorAll('#committed-table-body tr');
+            let canonMatches = 0;
+            canonicalRows.forEach(r => {
+                if (r.children.length > 1) { // ignore empty placeholder row
+                    const text = r.innerText.toLowerCase();
+                    const match = text.includes(term);
+                    r.style.display = match ? '' : 'none';
+                    if (match) canonMatches++;
+                }
+            });
+
+            // Filter Staging Diagnosis Table
+            const stagingRows = document.querySelectorAll('#staging-table-body tr');
+            stagingRows.forEach(r => {
                 const text = r.innerText.toLowerCase();
                 r.style.display = text.includes(term) ? '' : 'none';
             });
         }
 
+        function clearSearch() {
+            const input = document.getElementById('global-search');
+            input.value = '';
+            handleSearch();
+            input.focus();
+        }
+
+        // 2. VOICE SEARCH (WEB SPEECH API)
+        let recognition = null;
+        let isListening = false;
+
+        function toggleVoiceSearch() {
+            const micBtn = document.getElementById('btn-voice-search');
+            const micIcon = document.getElementById('voice-mic-icon');
+            const toast = document.getElementById('voice-toast');
+            const toastMsg = document.getElementById('voice-toast-msg');
+
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRec) {
+                alert("Voice search is not supported on this browser. Try Google Chrome or Safari!");
+                return;
+            }
+
+            if (isListening && recognition) {
+                recognition.stop();
+                return;
+            }
+
+            recognition = new SpeechRec();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-IN';
+
+            recognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('ring-4', 'ring-rose-400', 'bg-rose-50', 'text-rose-600');
+                micIcon.className = "fa-solid fa-microphone-lines text-xs text-rose-600 animate-pulse";
+                toast.classList.remove('hidden');
+                toastMsg.innerText = "Listening... Speak name or APAAR ID";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript.trim();
+                const searchInput = document.getElementById('global-search');
+                searchInput.value = transcript;
+                handleSearch();
+                toastMsg.innerText = `Searched: "${transcript}"`;
+                setTimeout(() => { toast.classList.add('hidden'); }, 2000);
+            };
+
+            recognition.onerror = (e) => {
+                toastMsg.innerText = "Didn't catch that. Please try again.";
+                setTimeout(() => { toast.classList.add('hidden'); }, 2500);
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                micBtn.classList.remove('ring-4', 'ring-rose-400', 'bg-rose-50', 'text-rose-600');
+                micIcon.className = "fa-solid fa-microphone text-xs";
+                if (toastMsg.innerText.includes("Listening")) {
+                    toast.classList.add('hidden');
+                }
+            };
+
+            recognition.start();
+        }
+
+        // 3. THEME TOGGLE (LIGHT / DARK)
+        function setTheme(theme) {
+            const html = document.documentElement;
+            const btnLight = document.getElementById('btn-theme-light');
+            const btnDark = document.getElementById('btn-theme-dark');
+
+            if (theme === 'dark') {
+                html.classList.add('dark');
+                btnDark.className = "w-7 h-7 rounded-full bg-emerald-800 text-white flex items-center justify-center text-xs shadow transition";
+                btnLight.className = "w-7 h-7 rounded-full flex items-center justify-center text-slate-400 text-xs hover:text-slate-200 transition";
+                localStorage.setItem('aicte_theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                btnLight.className = "w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 text-xs shadow-inner transition";
+                btnDark.className = "w-7 h-7 rounded-full flex items-center justify-center text-slate-400 text-xs hover:text-slate-600 transition";
+                localStorage.setItem('aicte_theme', 'light');
+            }
+        }
+
+        function initTheme() {
+            const saved = localStorage.getItem('aicte_theme') || 'light';
+            setTheme(saved);
+        }
+
+        // 4. NOTIFICATION DROPDOWN
+        function toggleNotificationDropdown() {
+            const dd = document.getElementById('dropdown-notifications');
+            const profileDd = document.getElementById('dropdown-profile');
+            
+            if (profileDd) profileDd.classList.add('hidden');
+            dd.classList.toggle('hidden');
+        }
+
+        function markAllNotificationsRead() {
+            const dot = document.getElementById('notification-badge-dot');
+            const countBadge = document.getElementById('unread-count-badge');
+            if (dot) dot.classList.add('hidden');
+            if (countBadge) {
+                countBadge.innerText = '0 New';
+                countBadge.className = 'bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full';
+            }
+        }
+
+        // 5. USER PROFILE DROPDOWN
+        function toggleProfileDropdown() {
+            const dd = document.getElementById('dropdown-profile');
+            const notifDd = document.getElementById('dropdown-notifications');
+            const chevron = document.getElementById('profile-chevron');
+            
+            if (notifDd) notifDd.classList.add('hidden');
+            const isHidden = dd.classList.contains('hidden');
+            
+            if (isHidden && currentSession) {
+                // Populate profile modal details
+                const initials = currentSession.full_name ? currentSession.full_name.split(' ').map(n => n[0]).join('').substring(0, 2) : 'AD';
+                document.getElementById('dropdown-avatar').innerText = initials;
+                document.getElementById('dropdown-user-name').innerText = currentSession.full_name;
+                document.getElementById('dropdown-role-badge').innerText = currentSession.role === 'AICTE_OFFICER' ? 'AICTE Central Officer' : 'College Admin';
+                document.getElementById('dropdown-inst-code').innerText = currentSession.institute_id || 'AICTE Central HQ';
+                document.getElementById('dropdown-quota').innerText = currentSession.approved_intake ? `${currentSession.approved_intake} Seats` : 'Apex Regulator';
+            }
+
+            dd.classList.toggle('hidden');
+            if (chevron) {
+                chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                chevron.style.transition = 'transform 0.2s ease';
+            }
+        }
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', (event) => {
+            const notifWrapper = document.getElementById('btn-notification-bell')?.parentElement;
+            const profileWrapper = document.getElementById('btn-profile-pill')?.parentElement;
+            const notifDropdown = document.getElementById('dropdown-notifications');
+            const profileDropdown = document.getElementById('dropdown-profile');
+
+            if (notifWrapper && !notifWrapper.contains(event.target) && notifDropdown) {
+                notifDropdown.classList.add('hidden');
+            }
+            if (profileWrapper && !profileWrapper.contains(event.target) && profileDropdown) {
+                profileDropdown.classList.add('hidden');
+                const chevron = document.getElementById('profile-chevron');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             checkSession();
+            initTheme();
         });
     </script>
 </body>
