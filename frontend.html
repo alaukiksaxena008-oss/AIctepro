@@ -49,9 +49,14 @@
     </script>
 
     <style>
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 10% 20%, #eff6f0 0%, #e5eee6 100%);
+            background-color: #f8faf9;
         }
         .hero-gradient {
             background: linear-gradient(108deg, #c38446 0%, #7e945c 48%, #28563a 100%);
@@ -143,12 +148,13 @@
         }
     </style>
 </head>
-<body class="text-slate-800 min-h-screen p-3 md:p-6 flex items-center justify-center">
+<body class="text-slate-800 h-screen w-screen overflow-hidden bg-[#f8faf9] m-0 p-0 font-sans">
 
     <!-- ======================================================== -->
-    <!-- SCREEN 1: LOGIN (MATCHING SOFT SAGE & WARM PALETTE)     -->
+    <!-- SCREEN 1: LOGIN (FULL VIEWPORT BACKDROP MODAL)          -->
     <!-- ======================================================== -->
-    <div id="screen-login" class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-2xl border border-slate-200/80 p-6 md:p-12 flex flex-col md:flex-row items-center gap-10">
+    <div id="screen-login-wrapper" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/30 backdrop-blur-md flex items-center justify-center p-4">
+        <div id="screen-login" class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-2xl border border-slate-200/80 p-6 md:p-12 flex flex-col md:flex-row items-center gap-10">
         
         <!-- Left Side: Graphic & Brand Pitch -->
         <div class="w-full md:w-1/2 hero-gradient rounded-[26px] p-8 md:p-10 text-white flex flex-col justify-between shadow-lg relative overflow-hidden min-h-[440px]">
@@ -243,17 +249,18 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 
     <!-- ======================================================== -->
-    <!-- SCREEN 2: MAIN DASHBOARD (EMEDLEY REPLICA PALETTE)      -->
+    <!-- SCREEN 2: MAIN DASHBOARD (FULL PAGE EDGE-TO-EDGE)       -->
     <!-- ======================================================== -->
-    <div id="screen-app" class="hidden w-full max-w-[1440px] bg-[#f8faf9] rounded-[32px] shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col md:flex-row min-h-[92vh]">
+    <div id="screen-app" class="hidden w-screen h-screen bg-[#f8faf9] overflow-hidden flex flex-col md:flex-row m-0 p-0">
         
         <!-- ============================================ -->
         <!-- SIDEBAR (LEFT NAVIGATION)                    -->
         <!-- ============================================ -->
-        <aside class="w-full md:w-64 bg-white border-r border-slate-200/80 p-5 flex flex-col justify-between shrink-0">
+        <aside class="w-full md:w-64 h-full bg-white border-r border-slate-200/80 p-5 flex flex-col justify-between shrink-0 overflow-y-auto custom-scrollbar">
             <div class="space-y-6">
                 
                 <!-- Brand Emblem -->
@@ -343,7 +350,7 @@
         <!-- ============================================ -->
         <!-- MAIN CONTENT AREA                            -->
         <!-- ============================================ -->
-        <main class="flex-grow p-4 md:p-8 space-y-6 overflow-y-auto max-h-[92vh] custom-scrollbar">
+        <main class="flex-grow h-full p-4 md:p-8 space-y-6 overflow-y-auto custom-scrollbar">
             
             <!-- TOP BAR (HEADER WITH PILL CONTROLS) -->
             <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -959,13 +966,15 @@
         }
 
         function showLoginScreen() {
-            document.getElementById('screen-login').classList.remove('hidden');
+            const loginWrapper = document.getElementById('screen-login-wrapper');
+            if (loginWrapper) loginWrapper.classList.remove('hidden');
             document.getElementById('screen-app').classList.add('hidden');
             document.getElementById('login-error').classList.add('hidden');
         }
 
         function showAppScreen() {
-            document.getElementById('screen-login').classList.add('hidden');
+            const loginWrapper = document.getElementById('screen-login-wrapper');
+            if (loginWrapper) loginWrapper.classList.add('hidden');
             document.getElementById('screen-app').classList.remove('hidden');
 
             document.getElementById('nav-user-name').innerText = currentSession.full_name;
