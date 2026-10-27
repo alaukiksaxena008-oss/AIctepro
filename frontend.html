@@ -623,27 +623,19 @@
                     <!-- Left: Upload & Staging Workspace (8 Columns) -->
                     <div class="lg:col-span-8 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-5">
                         
-                        <!-- Header with Mode Selector Pills -->
+                        <!-- Header: Simple & Clean -->
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
                             <div>
-                                <h3 class="font-extrabold text-slate-900 text-base">Step 2: Upload Student Sheet to Staging</h3>
-                                <p class="text-xs text-slate-400">Decoupled buffer: Raw rows sit in staging before committing to canonical students table.</p>
+                                <h3 class="font-extrabold text-slate-900 text-base">Add Students</h3>
+                                <p class="text-xs text-slate-400">Select an Excel (.xlsx) or CSV file, or paste rows below.</p>
                             </div>
 
-                            <!-- Preset Selectors -->
-                            <div class="bg-slate-100 p-1 rounded-2xl flex items-center space-x-1 text-xs">
-                                <button onclick="loadCOEPTestData()" class="px-3 py-1.5 rounded-xl font-bold transition bg-white shadow-sm text-emerald-800" title="Load 2 students batch">
-                                    2-Student CSV
+                            <!-- Single Simple Sample Action -->
+                            <div>
+                                <button type="button" onclick="loadCOEPTestData()" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-[11px]"></i>
+                                    <span>Fill Sample Data</span>
                                 </button>
-                                <button onclick="loadCleanTestData()" class="px-3 py-1.5 rounded-xl font-medium transition text-slate-600 hover:text-slate-900">
-                                    4 Students
-                                </button>
-                                <button onclick="loadExampleData()" class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800">
-                                    Error Demo
-                                </button>
-                                <a href="/api/download/coep-csv" download class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800 flex items-center" title="Download 2-student CSV">
-                                    <i class="fa-solid fa-download mr-1 text-[10px]"></i> CSV
-                                </a>
                             </div>
                         </div>
 
@@ -654,8 +646,8 @@
                                     <i class="fa-solid fa-file-arrow-up text-base"></i>
                                 </div>
                                 <div>
-                                    <label for="file-upload-input" class="cursor-pointer font-bold text-emerald-800 hover:underline">Select Excel (.xlsx) or CSV file</label>
-                                    <p class="text-[11px] text-slate-400 mt-0.5" id="file-name-display">Or paste text below</p>
+                                    <label for="file-upload-input" class="cursor-pointer font-bold text-emerald-800 hover:underline">Choose .xlsx or .csv file</label>
+                                    <p class="text-[11px] text-slate-400 mt-0.5" id="file-name-display">No file selected (or paste below)</p>
                                 </div>
                             </div>
                             <input type="file" id="file-upload-input" accept=".xlsx,.csv,.tsv" onchange="handleFileSelect(event)" class="hidden">
@@ -663,14 +655,14 @@
                         </div>
 
                         <!-- Direct Paste Area -->
-                        <textarea id="upload-data" rows="5" class="w-full text-xs font-mono p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-600 focus:bg-white focus:outline-none transition custom-scrollbar" placeholder="apaar_id,name,course,seat_category
-482910563721,Aarav Sharma,B.Tech,General
-..."></textarea>
+                        <textarea id="upload-data" rows="4" class="w-full text-xs font-mono p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-600 focus:bg-white focus:outline-none transition custom-scrollbar" placeholder="apaar_id,name,course,seat_category
+554433221100,Ishaan Joshi,B.Tech,General
+665544332211,Riya Sengupta,B.Tech,NRI"></textarea>
 
                         <div class="flex items-center justify-between pt-1">
-                            <span class="text-xs text-slate-400 font-medium" id="row-count-preview">Ready to stage</span>
+                            <span class="text-xs text-slate-400 font-medium" id="row-count-preview">Ready to insert</span>
                             <button onclick="submitBatch()" id="btn-submit-batch" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-md transition flex items-center">
-                                <span>Process In Staging</span>
+                                <span>Verify & Submit</span>
                                 <i class="fa-solid fa-arrow-right ml-2 text-[10px]"></i>
                             </button>
                         </div>
@@ -735,8 +727,8 @@
                     <div class="p-5 md:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
                         <div>
                             <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider" id="current-batch-id">Batch: BATCH-XXXX</span>
-                            <h3 class="text-lg font-extrabold text-slate-900 mt-0.5">Step 4: Staging Validation Diagnosis</h3>
-                            <p class="text-xs text-slate-400">One bad row does not block good ones. Inspect outcomes and commit verified rows.</p>
+                            <h3 class="text-lg font-extrabold text-slate-900 mt-0.5">Verification Results</h3>
+                            <p class="text-xs text-slate-400">Review status below. Click commit to insert accepted students into database.</p>
                         </div>
 
                         <!-- Live Summary Pills -->
