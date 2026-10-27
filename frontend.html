@@ -3,382 +3,636 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AICTE National Student Ingestion & APAAR Gateway</title>
+    <title>AICTE APAAR Gateway • National Student Ingestion Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        sage: {
+                            50: '#f4f8f4',
+                            100: '#e8f1e9',
+                            200: '#d2e4d5',
+                            300: '#a7caa9',
+                            500: '#4e8460',
+                            600: '#3c6c4c',
+                            700: '#2d543b',
+                            800: '#23432f',
+                            900: '#1a3324',
+                        },
+                        peach: {
+                            50: '#fff7f2',
+                            100: '#ffeedd',
+                            200: '#fed8c7',
+                            500: '#ea7a4e',
+                            600: '#d46237',
+                        },
+                        earth: {
+                            gold: '#c98a4a',
+                            forest: '#2d583e',
+                            olive: '#6b8754',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        .badge-accepted { @apply bg-emerald-100 text-emerald-800 border border-emerald-300; }
-        .badge-rejected { @apply bg-rose-100 text-rose-800 border border-rose-300; }
-        .badge-flagged  { @apply bg-amber-100 text-amber-800 border border-amber-300; }
-        pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #eff6f0 0%, #e5eee6 100%);
+        }
+        .hero-gradient {
+            background: linear-gradient(108deg, #c38446 0%, #7e945c 48%, #28563a 100%);
+        }
+        .sidebar-card-gradient {
+            background: linear-gradient(135deg, #a77747 0%, #526f4f 55%, #1f3f2a 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f2;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbdcd0;
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a3c2a8;
+        }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
+<body class="text-slate-800 min-h-screen p-3 md:p-6 flex items-center justify-center">
 
-    <!-- ========================================== -->
-    <!-- 1. LOGIN SCREEN (STEP 1)                   -->
-    <!-- ========================================== -->
-    <div id="screen-login" class="flex-grow flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-            <!-- Header Banner -->
-            <div class="bg-indigo-900 p-6 text-white text-center relative">
-                <div class="inline-flex h-14 w-14 bg-amber-500 rounded-xl items-center justify-center font-bold text-2xl text-indigo-950 shadow-md mb-2">
-                    AI
+    <!-- ======================================================== -->
+    <!-- SCREEN 1: LOGIN (MATCHING SOFT SAGE & WARM PALETTE)     -->
+    <!-- ======================================================== -->
+    <div id="screen-login" class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-[32px] shadow-2xl border border-slate-200/80 p-6 md:p-12 flex flex-col md:flex-row items-center gap-10">
+        
+        <!-- Left Side: Graphic & Brand Pitch -->
+        <div class="w-full md:w-1/2 hero-gradient rounded-[26px] p-8 md:p-10 text-white flex flex-col justify-between shadow-lg relative overflow-hidden min-h-[440px]">
+            <div class="relative z-10 space-y-4">
+                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-semibold text-white/95">
+                    <span class="w-2 h-2 rounded-full bg-amber-300 animate-pulse"></span>
+                    <span>AICTE National Gateway • AY 2026-27</span>
                 </div>
-                <h2 class="text-xl font-bold">AICTE Central Portal</h2>
-                <p class="text-xs text-indigo-200 mt-1">Student Data Ingestion & APAAR Verification Gateway</p>
-                
-                <div class="mt-3 inline-block bg-indigo-800/80 border border-indigo-700 text-indigo-200 text-xs px-3 py-1 rounded-full">
-                    <i class="fa-solid fa-calendar-check mr-1.5 text-amber-400"></i> Active Window: AY 2026-27 Open
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+                    Unified Student Ingestion & APAAR Verification
+                </h1>
+                <p class="text-white/80 text-sm leading-relaxed">
+                    Zero tenant spoofing. Decoupled staging quarantine. Multi-tier validation against the central Ministry of Education identity master.
+                </p>
+            </div>
+
+            <!-- Features Pill List -->
+            <div class="relative z-10 space-y-2 pt-6">
+                <div class="flex items-center space-x-2.5 text-xs text-white/90">
+                    <i class="fa-solid fa-circle-check text-amber-300"></i>
+                    <span>Session-bound institutional security (institute_id = PCT01)</span>
+                </div>
+                <div class="flex items-center space-x-2.5 text-xs text-white/90">
+                    <i class="fa-solid fa-circle-check text-amber-300"></i>
+                    <span>Partial commit resilience: 1 invalid row never blocks 499 good ones</span>
+                </div>
+                <div class="flex items-center space-x-2.5 text-xs text-white/90">
+                    <i class="fa-solid fa-circle-check text-amber-300"></i>
+                    <span>Cross-college dual-enrolment surveillance and quota cap enforcement</span>
                 </div>
             </div>
 
-            <div class="p-6 space-y-5">
-                <!-- Info Callout -->
-                <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-900">
-                    <p class="font-semibold flex items-center">
-                        <i class="fa-solid fa-shield-halved text-indigo-600 mr-1.5"></i> Step 1: Session-Bound Security
-                    </p>
-                    <p class="text-indigo-700 mt-0.5">
-                        The system looks up your issued account to bind your <code>institute_id</code>. Institutions never type their ID manually, preventing cross-tenant spoofing.
-                    </p>
+            <!-- Background decorative ambient circles -->
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-10 -top-10 w-52 h-52 bg-amber-300/20 rounded-full blur-2xl pointer-events-none"></div>
+        </div>
+
+        <!-- Right Side: Clean Login Form & One-Click Demo -->
+        <div class="w-full md:w-1/2 space-y-6">
+            <div>
+                <div class="flex items-center space-x-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-bold text-sm">
+                        AI
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-800">Govt. of India • AICTE Portal</span>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Institutional Login</h2>
+                <p class="text-xs text-slate-500 mt-1">Authenticate using credentials issued by AICTE to initialize your session.</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">Username / Admin ID</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-user text-xs"></i>
+                        </span>
+                        <input type="text" id="login-username" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white focus:outline-none transition" placeholder="e.g. pct_admin">
+                    </div>
                 </div>
 
-                <!-- Login Form -->
-                <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Username / Account ID</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                <i class="fa-solid fa-user text-xs"></i>
-                            </span>
-                            <input type="text" id="login-username" required class="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="e.g. pct_admin">
-                        </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-key text-xs"></i>
+                        </span>
+                        <input type="password" id="login-password" required class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-600 focus:bg-white focus:outline-none transition" placeholder="••••••••">
                     </div>
+                </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Issued Password</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                <i class="fa-solid fa-key text-xs"></i>
-                            </span>
-                            <input type="password" id="login-password" required class="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="••••••••">
-                        </div>
-                    </div>
+                <div id="login-error" class="hidden text-xs text-rose-700 bg-rose-50 border border-rose-200 p-2.5 rounded-xl font-medium"></div>
 
-                    <div id="login-error" class="hidden text-xs text-rose-600 bg-rose-50 border border-rose-200 p-2 rounded"></div>
+                <button type="submit" id="btn-login-submit" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white font-semibold py-3 rounded-xl text-sm shadow-md transition flex items-center justify-center">
+                    <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Log In to Portal
+                </button>
+            </form>
 
-                    <button type="submit" id="btn-login-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm shadow transition flex items-center justify-center">
-                        <i class="fa-solid fa-right-to-bracket mr-2"></i> Log In to Portal
+            <!-- Quick Demo One-Click Fill -->
+            <div class="pt-4 border-t border-slate-100">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center mb-3">One-Click Demonstration Logins</p>
+                <div class="grid grid-cols-2 gap-2.5 text-xs">
+                    <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-3 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
+                        <span class="font-bold text-slate-800 group-hover:text-emerald-900 block">Pune College of Tech</span>
+                        <span class="text-slate-500 text-[11px]">ID: PCT01 • College Admin</span>
                     </button>
-                </form>
-
-                <!-- Quick One-Click Demo Buttons -->
-                <div class="pt-3 border-t border-slate-200">
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide text-center mb-2">Quick One-Click Demo Login</p>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-2 border border-slate-200 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
-                            <span class="font-bold text-slate-800 block">Pune College of Tech</span>
-                            <span class="text-slate-500 text-[11px]">PCT01 • College Admin</span>
-                        </button>
-                        <button type="button" onclick="quickLogin('aicte_officer', 'aicte123')" class="p-2 border border-slate-200 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
-                            <span class="font-bold text-slate-800 block">AICTE Central Officer</span>
-                            <span class="text-slate-500 text-[11px]">Apex Regulatory Oversight</span>
-                        </button>
-                    </div>
+                    <button type="button" onclick="quickLogin('aicte_officer', 'aicte123')" class="p-3 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-amber-50 hover:border-amber-300 text-left transition group">
+                        <span class="font-bold text-slate-800 group-hover:text-amber-900 block">AICTE Central Officer</span>
+                        <span class="text-slate-500 text-[11px]">Apex Governance View</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 2. MAIN APPLICATION (AFTER LOGIN)          -->
-    <!-- ========================================== -->
-    <div id="screen-app" class="hidden flex-col min-h-screen">
+    <!-- ======================================================== -->
+    <!-- SCREEN 2: MAIN DASHBOARD (EMEDLEY REPLICA PALETTE)      -->
+    <!-- ======================================================== -->
+    <div id="screen-app" class="hidden w-full max-w-[1440px] bg-[#f8faf9] rounded-[32px] shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col md:flex-row min-h-[92vh]">
         
-        <!-- Top Nav Bar -->
-        <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <!-- ============================================ -->
+        <!-- SIDEBAR (LEFT NAVIGATION)                    -->
+        <!-- ============================================ -->
+        <aside class="w-full md:w-64 bg-white border-r border-slate-200/80 p-5 flex flex-col justify-between shrink-0">
+            <div class="space-y-6">
                 
-                <div class="flex items-center space-x-3">
-                    <div class="h-10 w-10 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-xl text-indigo-950 shadow">
-                        AI
+                <!-- Brand Emblem -->
+                <div class="flex items-center justify-between pb-2">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-800 to-amber-600 flex items-center justify-center text-white shadow-md">
+                            <i class="fa-solid fa-graduation-cap text-sm"></i>
+                        </div>
+                        <span class="font-extrabold text-lg tracking-tight text-slate-900">Emedley <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ml-1">AICTE</span></span>
                     </div>
-                    <div>
-                        <h1 class="font-bold text-base md:text-lg leading-tight">AICTE Ingestion & APAAR Gateway</h1>
-                        <p class="text-[11px] text-indigo-200">Staging Decoupling • Multi-Tier Verification</p>
+                    <button class="text-slate-400 hover:text-slate-600 md:hidden" onclick="logout()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Navigation List -->
+                <nav class="space-y-1.5 text-sm">
+                    
+                    <!-- Dashboard Tab (Warm Peach Active Style) -->
+                    <button onclick="setTab('college')" id="nav-item-college" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-semibold transition bg-peach-100 text-peach-600">
+                        <i class="fa-solid fa-table-cells-large text-peach-500 w-5 text-center"></i>
+                        <span>Dashboard</span>
+                    </button>
+
+                    <!-- Students Profile / Canonical Master -->
+                    <button onclick="scrollToCanonical()" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                        <i class="fa-regular fa-id-card text-slate-400 w-5 text-center"></i>
+                        <span>Students profile</span>
+                    </button>
+
+                    <!-- AICTE Apex Surveillance -->
+                    <button onclick="setTab('aicte')" id="nav-item-aicte" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-shield-halved text-slate-400 w-5 text-center"></i>
+                        <span>AICTE Apex</span>
+                    </button>
+
+                    <!-- DB Explorer Tab -->
+                    <button onclick="setTab('sql')" id="nav-item-sql" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-database text-slate-400 w-5 text-center"></i>
+                        <span>DB Explorer</span>
+                    </button>
+
+                    <!-- Course Resources -->
+                    <a href="/api/download/sample-excel" download class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                        <i class="fa-regular fa-file-excel text-slate-400 w-5 text-center"></i>
+                        <span>Excel Template</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Bottom of Sidebar -->
+            <div class="space-y-4 pt-6">
+                <!-- Mini Info Card Banner (Gradient identical to screenshot) -->
+                <div class="sidebar-card-gradient rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
+                    <div class="flex items-center -space-x-1.5 mb-2.5">
+                        <div class="w-6 h-6 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center text-[10px] text-emerald-950 font-bold">1</div>
+                        <div class="w-6 h-6 rounded-full bg-emerald-400 border-2 border-white flex items-center justify-center text-[10px] text-emerald-950 font-bold">2</div>
+                        <div class="w-6 h-6 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-[10px] text-emerald-950 font-bold">3</div>
+                        <span class="w-6 h-6 rounded-full bg-white/20 border-2 border-white/60 flex items-center justify-center text-[9px] font-bold">+14</span>
+                    </div>
+                    <p class="text-xs font-semibold leading-snug">Admission session active. Verified by AICTE.</p>
+                    <p class="text-[10px] text-white/75 mt-0.5" id="sidebar-inst-code">Session: PCT01</p>
+                    <div class="flex items-center space-x-2 mt-3">
+                        <button onclick="loadCleanTestData()" class="bg-white/90 hover:bg-white text-emerald-900 px-3 py-1 rounded-xl text-[11px] font-bold shadow-sm transition">
+                            Test Sheet
+                        </button>
+                        <button onclick="loadExampleData()" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-xl text-[11px] font-medium transition">
+                            Errors
+                        </button>
                     </div>
                 </div>
 
-                <!-- Nav Controls & User Session Info -->
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    
-                    <!-- Tabs -->
-                    <div class="flex items-center space-x-1">
-                        <button onclick="setTab('college')" id="tab-btn-college" class="px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow">
-                            <i class="fa-solid fa-building-columns mr-1"></i> College View
-                        </button>
-                        <button onclick="setTab('aicte')" id="tab-btn-aicte" class="px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800">
-                            <i class="fa-solid fa-shield-halved mr-1"></i> AICTE Apex
-                        </button>
-                        <button onclick="setTab('sql')" id="tab-btn-sql" class="px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800">
-                            <i class="fa-solid fa-terminal mr-1"></i> DB Explorer
-                        </button>
-                    </div>
-
-                    <!-- User Session Pill -->
-                    <div class="hidden md:flex items-center bg-indigo-950/60 border border-indigo-700/60 px-3 py-1 rounded-full text-xs">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2"></span>
-                        <div class="text-left">
-                            <span class="font-bold text-slate-100" id="nav-user-name">User</span>
-                            <span class="text-indigo-300 ml-1" id="nav-inst-id"></span>
-                        </div>
-                    </div>
-
-                    <!-- Logout Button -->
-                    <button onclick="logout()" title="Logout" class="px-2.5 py-1.5 bg-rose-900/60 hover:bg-rose-800 border border-rose-700/50 text-rose-200 hover:text-white rounded-lg text-xs font-medium transition flex items-center">
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                <!-- Footer Links -->
+                <div class="space-y-1 text-xs text-slate-500 border-t border-slate-100 pt-3">
+                    <button onclick="setTab('sql')" class="w-full flex items-center space-x-2.5 px-2 py-1.5 hover:text-slate-800 transition">
+                        <i class="fa-solid fa-gear text-slate-400"></i>
+                        <span>Settings & Schema</span>
+                    </button>
+                    <button onclick="logout()" class="w-full flex items-center space-x-2.5 px-2 py-1.5 text-rose-600 hover:text-rose-800 transition">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Log out</span>
                     </button>
                 </div>
             </div>
-        </header>
+        </aside>
 
-        <!-- Main Body Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+        <!-- ============================================ -->
+        <!-- MAIN CONTENT AREA                            -->
+        <!-- ============================================ -->
+        <main class="flex-grow p-4 md:p-8 space-y-6 overflow-y-auto max-h-[92vh] custom-scrollbar">
+            
+            <!-- TOP BAR (HEADER WITH PILL CONTROLS) -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight" id="topbar-title">Dashboard</h2>
+                    <p class="text-xs text-slate-500 font-medium mt-0.5" id="topbar-date">27 October, 2026 • Academic Year 2026-2027</p>
+                </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 1: COLLEGE VIEW                        -->
-            <!-- ========================================== -->
-            <div id="view-college" class="space-y-6">
-                
-                <!-- College Session Status Banner -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded" id="inst-badge">ID: PCT01</span>
-                            <span class="text-xs text-slate-500" id="inst-session-year">• Academic Year 2026-27 Active</span>
-                        </div>
-                        <h2 class="text-xl font-bold text-slate-900 mt-1" id="inst-title">Pune College of Technology</h2>
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            <i class="fa-solid fa-lock text-emerald-600 mr-1"></i>
-                            Session strictly bound to Institute ID. You cannot type or tamper with this ID.
-                        </p>
+                <!-- Right Pill Search & Profile Bar -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    
+                    <!-- Search Input -->
+                    <div class="relative bg-white rounded-full shadow-sm px-3.5 py-1.5 flex items-center border border-slate-200/60 text-xs w-48 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass text-slate-400 mr-2 text-xs"></i>
+                        <input type="text" id="global-search" oninput="handleSearch(event)" placeholder="Search student or APAAR..." class="w-full bg-transparent focus:outline-none text-slate-700 placeholder-slate-400">
                     </div>
 
-                    <!-- Intake Gauge -->
-                    <div class="flex items-center space-x-6 w-full md:w-auto bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <div>
-                            <p class="text-[11px] text-slate-500 uppercase font-medium tracking-wide">Sanctioned Quota (Cap)</p>
-                            <p class="text-2xl font-bold text-slate-800" id="stat-intake">60</p>
+                    <!-- Voice Icon Pill -->
+                    <button class="w-9 h-9 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-500 hover:text-emerald-700 transition">
+                        <i class="fa-solid fa-microphone text-xs"></i>
+                    </button>
+
+                    <!-- Theme Toggle -->
+                    <div class="bg-white rounded-full shadow-sm border border-slate-200/60 p-1 flex items-center space-x-1">
+                        <button class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 text-xs shadow-inner">
+                            <i class="fa-regular fa-sun"></i>
+                        </button>
+                        <button class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 text-xs hover:text-slate-600">
+                            <i class="fa-regular fa-moon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Notification Bell -->
+                    <button class="w-9 h-9 rounded-full bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-slate-500 hover:text-emerald-700 relative transition">
+                        <i class="fa-regular fa-bell text-xs"></i>
+                        <span class="w-2 h-2 rounded-full bg-amber-500 absolute top-2 right-2 ring-2 ring-white"></span>
+                    </button>
+
+                    <!-- User Profile Pill -->
+                    <div class="bg-white rounded-full shadow-sm border border-slate-200/60 pl-1.5 pr-3 py-1 flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-full bg-emerald-800 text-white flex items-center justify-center font-bold text-xs" id="nav-avatar">
+                            PJ
                         </div>
-                        <div class="h-8 border-r border-slate-300"></div>
-                        <div>
-                            <p class="text-[11px] text-slate-500 uppercase font-medium tracking-wide">Confirmed Enrolled</p>
-                            <p class="text-2xl font-bold text-indigo-600" id="stat-confirmed">0</p>
+                        <div class="text-left text-xs leading-tight pr-1">
+                            <span class="font-bold text-slate-800 block truncate max-w-[110px]" id="nav-user-name">Prof. S. Joshi</span>
+                            <span class="text-[10px] text-slate-400 block" id="nav-inst-id">PCT01</span>
                         </div>
-                        <div class="h-8 border-r border-slate-300"></div>
-                        <div>
-                            <p class="text-[11px] text-slate-500 uppercase font-medium tracking-wide">Seats Remaining</p>
-                            <p class="text-2xl font-bold text-emerald-600" id="stat-remaining">60</p>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================== -->
+            <!-- TAB: COLLEGE DASHBOARD                   -->
+            <!-- ======================================== -->
+            <div id="view-college" class="space-y-6">
+                
+                <!-- HERO GRADIENT BANNER (EXACT EMEDLEY STYLE) -->
+                <div class="hero-gradient rounded-3xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="space-y-3 max-w-xl z-10">
+                        <div class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-white/95">
+                            Academic Year 2026-2027 Active
                         </div>
-                        <div class="h-8 border-r border-slate-300"></div>
-                        <div class="w-32">
-                            <div class="flex justify-between text-xs mb-1">
-                                <span class="text-slate-500">Filled</span>
-                                <span class="font-bold text-slate-700" id="stat-fill">0%</span>
+                        <h3 class="text-xl md:text-3xl font-extrabold tracking-tight leading-snug">
+                            Overall Student Intake & APAAR Gateway of <span id="hero-inst-name">Pune College of Technology</span>
+                        </h3>
+                        <div class="flex items-center space-x-3 pt-1">
+                            <button onclick="scrollToUpload()" class="bg-white hover:bg-slate-50 text-emerald-950 font-bold px-5 py-2.5 rounded-full text-xs shadow-md transition">
+                                Upload Sheet
+                            </button>
+                            <span class="text-xs text-white/80"><i class="fa-solid fa-lock text-emerald-300 mr-1"></i> Bound to ID: PCT01</span>
+                        </div>
+                    </div>
+
+                    <!-- Isometric 3D Data Bars Graphic -->
+                    <div class="relative z-10 hidden sm:block shrink-0">
+                        <div class="w-48 h-32 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-end justify-between space-x-2">
+                            <div class="w-8 bg-emerald-400/80 rounded-t-lg h-12"></div>
+                            <div class="w-8 bg-emerald-300 rounded-t-lg h-20"></div>
+                            <div class="w-8 bg-amber-300 rounded-t-lg h-16"></div>
+                            <div class="w-8 bg-white/90 rounded-t-lg h-24"></div>
+                        </div>
+                    </div>
+
+                    <!-- Ambient Glow -->
+                    <div class="absolute -right-8 -top-8 w-60 h-60 bg-emerald-400/25 rounded-full blur-3xl pointer-events-none"></div>
+                </div>
+
+                <!-- 4 STAT METRIC CARDS (EXACT SCREENSHOT LAYOUT) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <!-- Card 1: Total Sanctioned Quota (Orange Accent) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <div class="w-10 h-10 rounded-full bg-peach-100 flex items-center justify-center text-peach-500 font-bold">
+                                <i class="fa-solid fa-users text-sm"></i>
                             </div>
-                            <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
-                                <div id="stat-progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                            <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">+75% YoY</span>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-xs font-semibold text-slate-400">Approved Intake (Cap)</p>
+                            <h4 class="text-2xl font-extrabold text-slate-900 mt-0.5" id="stat-intake">60</h4>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Confirmed Enrolled (Sage Accent) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">
+                                <i class="fa-solid fa-graduation-cap text-sm"></i>
                             </div>
+                            <span class="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Enrolled</span>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-xs font-semibold text-slate-400">Confirmed Students</p>
+                            <h4 class="text-2xl font-extrabold text-emerald-700 mt-0.5" id="stat-confirmed">6</h4>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Seats Remaining (Charcoal / Attendance Rate Style) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <div class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white font-bold">
+                                <i class="fa-solid fa-chair text-sm"></i>
+                            </div>
+                            <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Available</span>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-xs font-semibold text-slate-400">Seats Remaining</p>
+                            <h4 class="text-2xl font-extrabold text-slate-900 mt-0.5" id="stat-remaining">54</h4>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Intake Fill Rate (Bright Green Accent) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between">
+                            <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold">
+                                <i class="fa-solid fa-chart-pie text-sm"></i>
+                            </div>
+                            <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Quota Filled</span>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-xs font-semibold text-slate-400">Capacity Rate</p>
+                            <h4 class="text-2xl font-extrabold text-slate-900 mt-0.5" id="stat-fill">10%</h4>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Upload Grid -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- MIDDLE SECTION: INGESTION STAGE & SEAT CATEGORIES -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" id="upload-anchor">
                     
-                    <!-- Upload Input Card -->
-                    <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
-                        <div class="flex justify-between items-center">
-                            <h3 class="font-bold text-slate-900 flex items-center text-sm">
-                                <i class="fa-solid fa-cloud-arrow-up text-indigo-600 mr-2"></i>
-                                Step 2: Upload Student Sheet
-                            </h3>
-                            <div class="flex flex-wrap gap-1">
-                                <a href="/api/download/sample-excel" download class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded transition border border-emerald-200 flex items-center">
-                                    <i class="fa-solid fa-file-excel mr-1"></i> Excel
+                    <!-- Left: Upload & Staging Workspace (8 Columns) -->
+                    <div class="lg:col-span-8 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-5">
+                        
+                        <!-- Header with Mode Selector Pills -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 text-base">Step 2: Upload Student Sheet to Staging</h3>
+                                <p class="text-xs text-slate-400">Decoupled buffer: Raw rows sit in staging before committing to canonical students table.</p>
+                            </div>
+
+                            <!-- Preset Selectors -->
+                            <div class="bg-slate-100 p-1 rounded-2xl flex items-center space-x-1 text-xs">
+                                <button onclick="loadCleanTestData()" class="px-3 py-1.5 rounded-xl font-bold transition bg-white shadow-sm text-emerald-800">
+                                    Clean Test CSV
+                                </button>
+                                <button onclick="loadExampleData()" class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800">
+                                    Error Demo
+                                </button>
+                                <a href="/api/download/sample-excel" download class="px-3 py-1.5 rounded-xl font-medium transition text-slate-500 hover:text-slate-800 flex items-center">
+                                    <i class="fa-solid fa-download mr-1 text-[10px]"></i> Excel
                                 </a>
-                                <button type="button" onclick="loadCleanTestData()" class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded transition border border-emerald-200 flex items-center" title="Load 4 clean, valid students ready to commit">
-                                    <i class="fa-solid fa-circle-check mr-1 text-emerald-600"></i> Clean Test CSV
-                                </button>
-                                <button type="button" onclick="loadExampleData()" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2 py-1 rounded transition border border-indigo-200 flex items-center" title="Load prompt with errors & duplicates">
-                                    <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-500"></i> Error Demo
-                                </button>
                             </div>
                         </div>
 
-                        <!-- File Input / Drag & Drop -->
-                        <div class="p-3 border-2 border-dashed border-slate-200 rounded-lg hover:border-indigo-400 bg-slate-50 transition flex items-center justify-between text-xs">
-                            <div class="flex items-center space-x-2">
-                                <i class="fa-solid fa-file-arrow-up text-indigo-500 text-lg"></i>
+                        <!-- File Dropzone -->
+                        <div class="border-2 border-dashed border-slate-200 rounded-2xl p-4 hover:border-emerald-500 bg-slate-50/70 transition flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-file-arrow-up text-base"></i>
+                                </div>
                                 <div>
-                                    <label for="file-upload-input" class="cursor-pointer font-semibold text-indigo-600 hover:underline">Choose .xlsx or .csv</label>
-                                    <p class="text-[11px] text-slate-400" id="file-name-display">No file selected</p>
+                                    <label for="file-upload-input" class="cursor-pointer font-bold text-emerald-800 hover:underline">Select Excel (.xlsx) or CSV file</label>
+                                    <p class="text-[11px] text-slate-400 mt-0.5" id="file-name-display">Or paste text below</p>
                                 </div>
                             </div>
                             <input type="file" id="file-upload-input" accept=".xlsx,.csv,.tsv" onchange="handleFileSelect(event)" class="hidden">
+                            <span class="text-[11px] font-semibold text-slate-400 bg-white px-2.5 py-1 rounded-lg border border-slate-200">browse</span>
                         </div>
 
-                        <div class="relative text-center">
-                            <span class="bg-white px-2 text-[11px] text-slate-400 uppercase font-semibold">Or paste rows directly</span>
-                        </div>
-
-                        <textarea id="upload-data" rows="6" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="apaar_id,name,course,seat_category
+                        <!-- Direct Paste Area -->
+                        <textarea id="upload-data" rows="5" class="w-full text-xs font-mono p-3.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-emerald-600 focus:bg-white focus:outline-none transition custom-scrollbar" placeholder="apaar_id,name,course,seat_category
 482910563721,Aarav Sharma,B.Tech,General
 ..."></textarea>
 
-                        <div class="flex items-center justify-between pt-2">
-                            <span class="text-xs text-slate-400" id="row-count-preview">Ready to stage</span>
-                            <button onclick="submitBatch()" id="btn-submit-batch" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm shadow transition flex items-center">
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-xs text-slate-400 font-medium" id="row-count-preview">Ready to stage</span>
+                            <button onclick="submitBatch()" id="btn-submit-batch" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-6 py-2.5 rounded-full text-xs shadow-md transition flex items-center">
                                 <span>Process In Staging</span>
-                                <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                                <i class="fa-solid fa-arrow-right ml-2 text-[10px]"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Step 3: Checks in Order Explainer -->
-                    <div class="lg:col-span-7 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
-                        <h3 class="font-bold text-slate-900 flex items-center text-sm">
-                            <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i>
-                            Step 3: Verification Checks in Order
-                        </h3>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
-                                <div class="font-semibold text-slate-800 flex items-center">
-                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">1</span>
-                                    Format Check (No table)
+                    <!-- Right: Seat Categories & Quota Breakdown (4 Columns, like screenshot right card) -->
+                    <div class="lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-extrabold text-slate-900 text-base">Seat Distribution</h3>
+                                <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">↑ 47%</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">Sanctioned quotas for PCT01</p>
+                        </div>
+
+                        <div class="space-y-4 text-xs font-semibold">
+                            <!-- General -->
+                            <div>
+                                <div class="flex justify-between mb-1 text-slate-600">
+                                    <span>General Merit</span>
+                                    <span class="text-slate-900 font-bold">40 Seats</span>
                                 </div>
-                                <p class="text-slate-500 mt-1">Regex check: exactly 12 numeric digits. Invalid IDs (e.g. <code>12345</code>) are rejected immediately.</p>
+                                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-peach-500 h-2 rounded-full" style="width: 66%"></div>
+                                </div>
                             </div>
 
-                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
-                                <div class="font-semibold text-slate-800 flex items-center">
-                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">2</span>
-                                    Registry Check (apaar_registry)
+                            <!-- OBC -->
+                            <div>
+                                <div class="flex justify-between mb-1 text-slate-600">
+                                    <span>OBC Quota</span>
+                                    <span class="text-slate-900 font-bold">12 Seats</span>
                                 </div>
-                                <p class="text-slate-500 mt-1">Queries national master. Rejects if not found (e.g. <code>903817265540</code>); flags if candidate name differs from official record.</p>
+                                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-emerald-600 h-2 rounded-full" style="width: 20%"></div>
+                                </div>
                             </div>
 
-                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
-                                <div class="font-semibold text-slate-800 flex items-center">
-                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">3</span>
-                                    Redundancy Check (staging & students)
+                            <!-- NRI -->
+                            <div>
+                                <div class="flex justify-between mb-1 text-slate-600">
+                                    <span>NRI / Management</span>
+                                    <span class="text-slate-900 font-bold">8 Seats</span>
                                 </div>
-                                <p class="text-slate-500 mt-1">Rejects duplicate in file (Aarav #2). Rejects if already enrolled in PCT. Flags if active at another college (Vikram at COEP).</p>
-                            </div>
-
-                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
-                                <div class="font-semibold text-slate-800 flex items-center">
-                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">4</span>
-                                    Intake & Anomaly Check (institutes)
+                                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-slate-900 h-2 rounded-full" style="width: 14%"></div>
                                 </div>
-                                <p class="text-slate-500 mt-1">Verifies approved quota and flags large YoY surges (>50%) for AICTE officer review.</p>
                             </div>
                         </div>
 
-                        <!-- Active Batch Result Card -->
-                        <div id="batch-summary-card" class="hidden mt-4 p-4 rounded-lg bg-indigo-50 border border-indigo-200">
-                            <div class="flex flex-wrap items-center justify-between gap-3">
-                                <div>
-                                    <span class="text-xs font-semibold text-indigo-900" id="current-batch-id">Batch: BATCH-XXXX</span>
-                                    <div class="flex items-center space-x-3 mt-1 text-xs">
-                                        <span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i><span id="badge-acc-count">0</span> Accepted</span>
-                                        <span class="text-rose-700 font-bold"><i class="fa-solid fa-circle-xmark mr-1"></i><span id="badge-rej-count">0</span> Rejected</span>
-                                        <span class="text-amber-700 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i><span id="badge-flg-count">0</span> Flagged</span>
-                                    </div>
-                                </div>
-                                <button onclick="commitActiveBatch()" id="btn-commit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm shadow transition flex items-center">
-                                    <i class="fa-solid fa-database mr-2"></i> Commit Accepted to Official DB
-                                </button>
-                            </div>
+                        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 text-[11px] text-slate-500 space-y-1">
+                            <p class="font-bold text-slate-800 flex items-center">
+                                <i class="fa-solid fa-shield-halved text-emerald-700 mr-1.5"></i> Verification Pipeline:
+                            </p>
+                            <p>1. Format (12 digits) → 2. Central Registry → 3. In-File & Cross-College Redundancy → 4. Quota Cap</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Staging Row Results Table (Step 4) -->
-                <div id="staging-results-container" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hidden">
-                    <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <!-- STAGING BATCH RESULTS TABLE (STEP 4) -->
+                <div id="staging-results-container" class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden hidden">
+                    <div class="p-5 md:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
                         <div>
-                            <h3 class="font-bold text-slate-900 text-sm">Step 4: Result Shown to College (Staging Report)</h3>
-                            <p class="text-xs text-slate-500">One bad row doesn’t block the good ones. Fix rejected rows and re-upload just those.</p>
+                            <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider" id="current-batch-id">Batch: BATCH-XXXX</span>
+                            <h3 class="text-lg font-extrabold text-slate-900 mt-0.5">Step 4: Staging Validation Diagnosis</h3>
+                            <p class="text-xs text-slate-400">One bad row does not block good ones. Inspect outcomes and commit verified rows.</p>
                         </div>
-                        <span id="commit-status-tag" class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-200 text-slate-700">STAGED</span>
+
+                        <!-- Live Summary Pills -->
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                <i class="fa-solid fa-circle-check mr-1 text-[11px]"></i> <span id="badge-acc-count">0</span> Accepted
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
+                                <i class="fa-solid fa-circle-xmark mr-1 text-[11px]"></i> <span id="badge-rej-count">0</span> Rejected
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+                                <i class="fa-solid fa-triangle-exclamation mr-1 text-[11px]"></i> <span id="badge-flg-count">0</span> Flagged
+                            </span>
+                            <button onclick="commitActiveBatch()" id="btn-commit" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-5 py-2 rounded-full text-xs shadow-md transition flex items-center ml-2">
+                                <i class="fa-solid fa-database mr-2"></i> Commit Accepted Rows
+                            </button>
+                        </div>
                     </div>
-                    
+
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-100 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
                                 <tr>
-                                    <th class="py-3 px-4">#</th>
-                                    <th class="py-3 px-4">APAAR ID</th>
-                                    <th class="py-3 px-4">Student Name</th>
-                                    <th class="py-3 px-4">Course & Category</th>
-                                    <th class="py-3 px-4">Outcome</th>
-                                    <th class="py-3 px-4">Validation Diagnosis / Reason</th>
+                                    <th class="py-3 px-5">#</th>
+                                    <th class="py-3 px-5">APAAR ID</th>
+                                    <th class="py-3 px-5">Student Name</th>
+                                    <th class="py-3 px-5">Course</th>
+                                    <th class="py-3 px-5">Category</th>
+                                    <th class="py-3 px-5">Status</th>
+                                    <th class="py-3 px-5">Diagnosis Detail</th>
                                 </tr>
                             </thead>
                             <tbody id="staging-table-body" class="divide-y divide-slate-100 font-mono">
-                                <!-- Dynamic -->
+                                <!-- Injected via JS -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Canonical Database Table (Step 5 & 6) -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+                <!-- CANONICAL COMMITTED MASTER (STEP 6 - BOTTOM TABLE IDENTICAL TO EMEDLEY SCREENSHOT) -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden" id="canonical-master-anchor">
+                    <div class="p-5 md:p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
                         <div>
-                            <h3 class="font-bold text-slate-900 text-sm">Step 6: Official Enrolled Students Master (students table)</h3>
-                            <p class="text-xs text-slate-500">Live canonical records committed into AICTE central database.</p>
+                            <h3 class="text-lg font-extrabold text-slate-900">Visualize Your Official Students Master</h3>
+                            <p class="text-xs text-slate-400">Canonical records officially committed into AICTE database (students table)</p>
                         </div>
-                        <button onclick="refreshCollegeDashboard()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold">
-                            <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh Table
-                        </button>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-peach-100 text-peach-600 text-xs font-bold px-3 py-1.5 rounded-full">
+                                AY 2026-27 Master
+                            </span>
+                            <button onclick="refreshCollegeDashboard()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition" title="Refresh">
+                                <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                            </button>
+                        </div>
                     </div>
-                    
+
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
                                 <tr>
-                                    <th class="py-3 px-4">Student ID (PK)</th>
-                                    <th class="py-3 px-4">APAAR ID</th>
-                                    <th class="py-3 px-4">Name</th>
-                                    <th class="py-3 px-4">Course</th>
-                                    <th class="py-3 px-4">Category</th>
-                                    <th class="py-3 px-4">Batch ID</th>
-                                    <th class="py-3 px-4">Enrolled At</th>
+                                    <th class="py-3 px-5">Name & Avatar</th>
+                                    <th class="py-3 px-5">Students ID</th>
+                                    <th class="py-3 px-5">APAAR ID</th>
+                                    <th class="py-3 px-5">Course</th>
+                                    <th class="py-3 px-5">Category</th>
+                                    <th class="py-3 px-5">Batch ID</th>
+                                    <th class="py-3 px-5">Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="committed-table-body" class="divide-y divide-slate-100">
-                                <tr><td colspan="7" class="py-4 text-center text-slate-400">Loading enrolled records...</td></tr>
+                            <tbody id="committed-table-body" class="divide-y divide-slate-100 font-sans">
+                                <tr><td colspan="7" class="py-6 text-center text-slate-400">Loading student records...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 2: AICTE APEX VIEW                     -->
-            <!-- ========================================== -->
+            <!-- ======================================== -->
+            <!-- TAB: AICTE APEX SURVEILLANCE             -->
+            <!-- ======================================== -->
             <div id="view-aicte" class="hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-                    <div class="flex items-center space-x-2">
-                        <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">AICTE Apex Authority</span>
-                        <span class="text-xs text-slate-500">• National Oversight & Governance Dashboard</span>
+                <div class="hero-gradient rounded-3xl p-6 md:p-8 text-white shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-semibold">Apex Regulatory Body</span>
+                        <h2 class="text-2xl font-extrabold mt-1">National Multi-Institute Governance</h2>
+                        <p class="text-xs text-white/80 mt-1">Central surveillance of sanctioned intake, cross-enrolments, and regulatory audit trail.</p>
                     </div>
-                    <h2 class="text-xl font-bold text-slate-900 mt-1">Institutions & Cross-Enrolment Surveillance</h2>
-                    <p class="text-xs text-slate-500">Centralized detection of dual-enrolments, capacity breaches, and statistical intake anomalies across all institutes.</p>
+                    <button onclick="loadAICTEOverview()" class="bg-white text-emerald-950 font-bold px-4 py-2 rounded-full text-xs shadow-md">
+                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh Nationwide Data
+                    </button>
                 </div>
 
                 <!-- Institutes Overview Grid -->
@@ -386,54 +640,51 @@
                     <!-- Dynamic -->
                 </div>
 
-                <!-- Flagged Incidents Queue -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-4 border-b border-slate-200 bg-amber-50 flex items-center justify-between">
+                <!-- Flagged Collisions Queue -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-amber-50/60">
                         <div>
-                            <h3 class="font-bold text-amber-950 text-sm flex items-center">
+                            <h3 class="font-extrabold text-amber-950 text-base flex items-center">
                                 <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-2"></i>
-                                Flagged for AICTE Reviewer Action
+                                Flagged Incidents Queue (Cross-Institute Collisions)
                             </h3>
-                            <p class="text-xs text-amber-800">Dual-enrolment collisions, name mismatches, and excess capacity warnings.</p>
+                            <p class="text-xs text-amber-800">Requires review before dual admission is approved.</p>
                         </div>
-                        <span class="text-xs font-semibold px-2 py-0.5 bg-amber-200 text-amber-900 rounded" id="aicte-flagged-count">0 items</span>
+                        <span class="text-xs font-bold px-3 py-1 bg-amber-200 text-amber-900 rounded-full" id="aicte-flagged-count">0 items</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
                                 <tr>
-                                    <th class="py-3 px-4">Institute</th>
-                                    <th class="py-3 px-4">Batch ID</th>
-                                    <th class="py-3 px-4">APAAR ID</th>
-                                    <th class="py-3 px-4">Uploaded Name</th>
-                                    <th class="py-3 px-4">Flag Diagnosis</th>
+                                    <th class="py-3 px-5">Institute</th>
+                                    <th class="py-3 px-5">Batch ID</th>
+                                    <th class="py-3 px-5">APAAR ID</th>
+                                    <th class="py-3 px-5">Uploaded Name</th>
+                                    <th class="py-3 px-5">Flag Reason</th>
                                 </tr>
                             </thead>
-                            <tbody id="aicte-flagged-table-body" class="divide-y divide-slate-100">
+                            <tbody id="aicte-flagged-table-body" class="divide-y divide-slate-100 font-mono">
                                 <!-- Dynamic -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Regulatory Audit Trail -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-                        <h3 class="font-bold text-slate-900 text-sm flex items-center">
-                            <i class="fa-solid fa-clipboard-check text-indigo-600 mr-2"></i>
-                            Immutable Regulatory Audit Log (audit_logs table)
-                        </h3>
+                <!-- Regulatory Audit Ledger -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="font-extrabold text-slate-900 text-base">Immutable Regulatory Audit Log (audit_logs table)</h3>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs font-mono">
-                            <thead class="bg-slate-100 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
                                 <tr>
-                                    <th class="py-3 px-4">Log ID (PK)</th>
-                                    <th class="py-3 px-4">Timestamp</th>
-                                    <th class="py-3 px-4">Institute</th>
-                                    <th class="py-3 px-4">Action</th>
-                                    <th class="py-3 px-4">Actor</th>
-                                    <th class="py-3 px-4">Details</th>
+                                    <th class="py-3 px-5">Log ID</th>
+                                    <th class="py-3 px-5">Timestamp</th>
+                                    <th class="py-3 px-5">Institute</th>
+                                    <th class="py-3 px-5">Action</th>
+                                    <th class="py-3 px-5">Actor</th>
+                                    <th class="py-3 px-5">Details</th>
                                 </tr>
                             </thead>
                             <tbody id="aicte-audit-table-body" class="divide-y divide-slate-100">
@@ -444,61 +695,55 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 3: DB QUERY EXPLORER                   -->
-            <!-- ========================================== -->
+            <!-- ======================================== -->
+            <!-- TAB: DATABASE SQL QUERY EXPLORER         -->
+            <!-- ======================================== -->
             <div id="view-sql" class="hidden space-y-6">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-900">SQLite Database Query Explorer</h2>
-                        <p class="text-xs text-slate-500">Directly query the database tables to inspect primary keys, foreign keys, staging buffers, and audit trails.</p>
+                        <h2 class="text-xl font-extrabold text-slate-900">SQLite Database Query Explorer</h2>
+                        <p class="text-xs text-slate-400">Direct query tool to inspect schema, staging buffers, and primary keys.</p>
                     </div>
 
                     <div class="flex flex-wrap gap-2 text-xs">
-                        <span class="text-slate-500 self-center font-medium">Quick Presets:</span>
-                        <button onclick="setQuery('SELECT * FROM students;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                        <span class="text-slate-400 self-center font-bold">Presets:</span>
+                        <button onclick="setQuery('SELECT * FROM students;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full font-medium transition">
                             students (Master)
                         </button>
-                        <button onclick="setQuery('SELECT * FROM staging_rows ORDER BY row_id DESC LIMIT 20;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                        <button onclick="setQuery('SELECT * FROM staging_rows ORDER BY row_id DESC LIMIT 20;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full font-medium transition">
                             staging_rows
                         </button>
-                        <button onclick="setQuery('SELECT * FROM users;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
-                            users (Auth & Session)
-                        </button>
-                        <button onclick="setQuery('SELECT * FROM apaar_registry;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                        <button onclick="setQuery('SELECT * FROM apaar_registry;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full font-medium transition">
                             apaar_registry
                         </button>
-                        <button onclick="setQuery('SELECT * FROM staging_batches;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                        <button onclick="setQuery('SELECT * FROM staging_batches;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full font-medium transition">
                             staging_batches
                         </button>
-                        <button onclick="setQuery('SELECT * FROM institutes;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
-                            institutes
-                        </button>
-                        <button onclick="setQuery('SELECT * FROM audit_logs ORDER BY timestamp DESC;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                        <button onclick="setQuery('SELECT * FROM audit_logs ORDER BY timestamp DESC LIMIT 15;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full font-medium transition">
                             audit_logs
                         </button>
                     </div>
 
                     <div class="space-y-2">
-                        <textarea id="sql-input" rows="4" class="w-full text-xs font-mono p-3 bg-slate-900 text-emerald-400 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" spellcheck="false">SELECT * FROM students;</textarea>
+                        <textarea id="sql-input" rows="4" class="w-full text-xs font-mono p-4 bg-slate-900 text-emerald-400 rounded-2xl focus:ring-2 focus:ring-emerald-600 focus:outline-none" spellcheck="false">SELECT * FROM students;</textarea>
                         <div class="flex justify-between items-center">
-                            <span class="text-xs text-slate-400" id="query-meta">Ready</span>
-                            <button onclick="executeSQL()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-xs shadow transition">
-                                <i class="fa-solid fa-play mr-1.5"></i> Run SQL Query
+                            <span class="text-xs text-slate-400 font-medium" id="query-meta">Ready</span>
+                            <button onclick="executeSQL()" class="bg-emerald-800 hover:bg-emerald-900 text-white font-bold px-5 py-2 rounded-full text-xs shadow-md transition">
+                                <i class="fa-solid fa-play mr-1.5"></i> Run SQL
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="px-5 py-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
-                        <span class="text-xs font-semibold text-slate-700">Query Output Grid</span>
-                        <span class="text-xs text-slate-500" id="result-row-count">0 rows</span>
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Output Grid</span>
+                        <span class="text-xs text-slate-500 font-mono" id="result-row-count">0 rows</span>
                     </div>
-                    <div class="overflow-x-auto max-h-96">
+                    <div class="overflow-x-auto max-h-96 custom-scrollbar">
                         <table class="w-full text-left text-xs font-mono">
-                            <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b border-slate-200" id="sql-table-head">
-                                <tr><th class="py-2.5 px-4">Execute a query above to view results</th></tr>
+                            <thead class="bg-slate-100 text-slate-700 uppercase font-bold text-[10px] tracking-wider border-b border-slate-200" id="sql-table-head">
+                                <tr><th class="py-2.5 px-4">Execute query to inspect output</th></tr>
                             </thead>
                             <tbody id="sql-table-body" class="divide-y divide-slate-100">
                                 <!-- Dynamic -->
@@ -511,12 +756,13 @@
         </main>
     </div>
 
-    <!-- Application Script -->
+    <!-- Application Controller -->
     <script>
         let currentSession = null;
         let activeBatchId = null;
+        let selectedUploadFile = null;
 
-        // --- AUTHENTICATION & LOGIN (STEP 1) ---
+        // --- SESSION & AUTHENTICATION ---
         function checkSession() {
             const saved = sessionStorage.getItem('aicte_session');
             if (saved) {
@@ -542,7 +788,16 @@
             document.getElementById('screen-app').classList.remove('hidden');
 
             document.getElementById('nav-user-name').innerText = currentSession.full_name;
-            document.getElementById('nav-inst-id').innerText = currentSession.institute_id ? `(${currentSession.institute_id})` : '(AICTE Central)';
+            document.getElementById('nav-inst-id').innerText = currentSession.institute_id || 'AICTE Central';
+            
+            // Initials avatar
+            const initials = currentSession.full_name.split(' ').map(n => n[0]).join('').substring(0, 2);
+            document.getElementById('nav-avatar').innerText = initials || 'AD';
+
+            if (currentSession.institute_id) {
+                document.getElementById('sidebar-inst-code').innerText = `Session: ${currentSession.institute_id}`;
+                document.getElementById('hero-inst-name').innerText = currentSession.institute_name || currentSession.institute_id;
+            }
 
             if (currentSession.role === 'AICTE_OFFICER') {
                 setTab('aicte');
@@ -579,7 +834,7 @@
                 errBox.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-2"></i> Log In to Portal`;
+                btn.innerHTML = `<i class="fa-solid fa-arrow-right-to-bracket mr-2"></i> Log In to Portal`;
             }
         }
 
@@ -595,31 +850,54 @@
             showLoginScreen();
         }
 
-        // --- TABS & NAVIGATION ---
+        // --- NAVIGATION TABS ---
         function setTab(tab) {
             document.getElementById('view-college').classList.toggle('hidden', tab !== 'college');
             document.getElementById('view-aicte').classList.toggle('hidden', tab !== 'aicte');
             document.getElementById('view-sql').classList.toggle('hidden', tab !== 'sql');
 
-            document.getElementById('tab-btn-college').className = tab === 'college' 
-                ? "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow"
-                : "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800";
+            // Set active pill styles in sidebar
+            const collegeBtn = document.getElementById('nav-item-college');
+            const aicteBtn = document.getElementById('nav-item-aicte');
+            const sqlBtn = document.getElementById('nav-item-sql');
+
+            collegeBtn.className = tab === 'college'
+                ? "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-bold transition bg-peach-100 text-peach-600 shadow-sm"
+                : "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition";
             
-            document.getElementById('tab-btn-aicte').className = tab === 'aicte' 
-                ? "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow"
-                : "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800";
+            aicteBtn.className = tab === 'aicte'
+                ? "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-bold transition bg-peach-100 text-peach-600 shadow-sm"
+                : "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition";
 
-            document.getElementById('tab-btn-sql').className = tab === 'sql' 
-                ? "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow"
-                : "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800";
+            sqlBtn.className = tab === 'sql'
+                ? "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-bold transition bg-peach-100 text-peach-600 shadow-sm"
+                : "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition";
 
-            if (tab === 'aicte') loadAICTEOverview();
-            if (tab === 'college') refreshCollegeDashboard();
-            if (tab === 'sql') executeSQL();
+            if (tab === 'college') {
+                document.getElementById('topbar-title').innerText = "Dashboard";
+                refreshCollegeDashboard();
+            } else if (tab === 'aicte') {
+                document.getElementById('topbar-title').innerText = "AICTE Apex Oversight";
+                loadAICTEOverview();
+            } else if (tab === 'sql') {
+                document.getElementById('topbar-title').innerText = "SQLite Query Explorer";
+                executeSQL();
+            }
         }
 
-        // Load exact example from user prompt
+        function scrollToUpload() {
+            setTab('college');
+            document.getElementById('upload-anchor').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToCanonical() {
+            setTab('college');
+            document.getElementById('canonical-master-anchor').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- PRESET DATA LOADERS ---
         function loadExampleData() {
+            setTab('college');
             const sample = 
 `apaar_id,name,course,seat_category
 482910563721,Aarav Sharma,B.Tech,General
@@ -635,6 +913,7 @@
         }
 
         function loadCleanTestData() {
+            setTab('college');
             const cleanSample = 
 `apaar_id,name,course,seat_category
 667788990011,Aditya Patil,B.Tech,General
@@ -642,12 +921,10 @@
 223344556677,Rahul Deshmukh,B.Tech,General
 445566778899,Priya Nair,B.Tech,NRI`;
             document.getElementById('upload-data').value = cleanSample;
-            document.getElementById('row-count-preview').innerText = "Loaded 4 fresh, clean students ready to verify and commit to DB";
+            document.getElementById('row-count-preview').innerText = "Loaded 4 fresh, clean students ready to verify and commit";
             selectedUploadFile = null;
             document.getElementById('file-name-display').innerText = "No file selected (using text)";
         }
-
-        let selectedUploadFile = null;
 
         function handleFileSelect(event) {
             const file = event.target.files[0];
@@ -655,16 +932,15 @@
                 selectedUploadFile = file;
                 document.getElementById('file-name-display').innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
                 document.getElementById('row-count-preview').innerText = `File ready: ${file.name}`;
-                // Clear text area to prevent conflict
                 document.getElementById('upload-data').value = "";
             }
         }
 
-        // --- STEP 2: UPLOAD BATCH TO STAGING ---
+        // --- SUBMIT BATCH TO STAGING ---
         async function submitBatch() {
             const raw = document.getElementById('upload-data').value.trim();
             if (!raw && !selectedUploadFile) {
-                alert("Please select a file (.xlsx/.csv) or paste student rows first!");
+                alert("Please select an Excel/CSV file or paste student rows first!");
                 return;
             }
 
@@ -684,7 +960,7 @@
 
             const btn = document.getElementById('btn-submit-batch');
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying in Staging...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying...`;
 
             try {
                 const res = await fetch('/api/upload', {
@@ -695,8 +971,8 @@
                 if (!res.ok) throw new Error(data.detail || "Upload error");
 
                 activeBatchId = data.batch_id;
-                document.getElementById('batch-summary-card').classList.remove('hidden');
-                document.getElementById('current-batch-id').innerText = `Batch ID: ${data.batch_id} (Staged)`;
+                document.getElementById('staging-results-container').classList.remove('hidden');
+                document.getElementById('current-batch-id').innerText = `Batch: ${data.batch_id} (Staged)`;
                 document.getElementById('badge-acc-count').innerText = data.accepted;
                 document.getElementById('badge-rej-count').innerText = data.rejected;
                 document.getElementById('badge-flg-count').innerText = data.flagged;
@@ -707,35 +983,26 @@
                 alert("Error: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<span>Process In Staging</span><i class="fa-solid fa-arrow-right ml-2 text-xs"></i>`;
+                btn.innerHTML = `<span>Process In Staging</span><i class="fa-solid fa-arrow-right ml-2 text-[10px]"></i>`;
             }
         }
 
-        // --- STEP 4: LOAD STAGING REPORT ---
+        // --- LOAD BATCH DIAGNOSIS TABLE ---
         async function loadBatchDetails(batchId) {
             const res = await fetch(`/api/batches/${batchId}`);
             const data = await res.json();
             
-            const container = document.getElementById('staging-results-container');
-            container.classList.remove('hidden');
-
-            const statusTag = document.getElementById('commit-status-tag');
-            statusTag.innerText = data.batch.status;
-            statusTag.className = data.batch.status === 'COMMITTED' 
-                ? "text-xs font-semibold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800"
-                : "text-xs font-semibold px-2.5 py-1 rounded bg-slate-200 text-slate-700";
-
             const tbody = document.getElementById('staging-table-body');
             tbody.innerHTML = '';
 
             data.rows.forEach(r => {
-                let badgeClass = "badge-accepted";
+                let badgeClass = "bg-emerald-100 text-emerald-800";
                 let icon = "fa-circle-check text-emerald-600";
                 if (r.validation_status === 'REJECTED') {
-                    badgeClass = "badge-rejected";
+                    badgeClass = "bg-rose-100 text-rose-800";
                     icon = "fa-circle-xmark text-rose-600";
                 } else if (r.validation_status === 'FLAGGED') {
-                    badgeClass = "badge-flagged";
+                    badgeClass = "bg-amber-100 text-amber-800";
                     icon = "fa-triangle-exclamation text-amber-600";
                 }
 
@@ -743,22 +1010,23 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="py-2.5 px-4 font-sans text-slate-500">${r.row_num}</td>
-                    <td class="py-2.5 px-4 font-bold text-slate-800">${r.raw_apaar_id}</td>
-                    <td class="py-2.5 px-4 font-sans font-medium text-slate-900">${r.raw_name}</td>
-                    <td class="py-2.5 px-4 font-sans text-slate-600">${r.course} <span class="text-[11px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded ml-1">${r.seat_category}</span></td>
-                    <td class="py-2.5 px-4">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${badgeClass}">
-                            <i class="fa-solid ${icon} mr-1"></i> ${r.validation_status}
+                    <td class="py-3 px-5 text-slate-400 font-sans">${r.row_num}</td>
+                    <td class="py-3 px-5 font-bold text-slate-800">${r.raw_apaar_id}</td>
+                    <td class="py-3 px-5 font-sans font-semibold text-slate-900">${r.raw_name}</td>
+                    <td class="py-3 px-5 font-sans text-slate-600">${r.course}</td>
+                    <td class="py-3 px-5 font-sans"><span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-[11px] font-semibold">${r.seat_category}</span></td>
+                    <td class="py-3 px-5">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${badgeClass}">
+                            <i class="fa-solid ${icon} mr-1 text-[11px]"></i> ${r.validation_status}
                         </span>
                     </td>
-                    <td class="py-2.5 px-4 font-sans text-slate-600 text-xs">${reason}</td>
+                    <td class="py-3 px-5 font-sans text-slate-600 text-xs">${reason}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // --- STEP 5: COMMIT ACCEPTED ROWS ---
+        // --- COMMIT ACCEPTED ROWS ---
         async function commitActiveBatch() {
             if (!activeBatchId) return;
 
@@ -767,7 +1035,7 @@
 
             const btn = document.getElementById('btn-commit');
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Committing to Master...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Committing...`;
 
             try {
                 const res = await fetch('/api/commit', {
@@ -787,11 +1055,11 @@
                 alert("Commit error: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-database mr-2"></i> Commit Accepted to Official DB`;
+                btn.innerHTML = `<i class="fa-solid fa-database mr-2"></i> Commit Accepted Rows`;
             }
         }
 
-        // --- REFRESH COLLEGE DASHBOARD ---
+        // --- REFRESH DASHBOARD ---
         async function refreshCollegeDashboard() {
             const instId = (currentSession && currentSession.institute_id) ? currentSession.institute_id : 'PCT01';
 
@@ -799,31 +1067,45 @@
                 const res = await fetch(`/api/dashboard/${instId}`);
                 const data = await res.json();
 
-                document.getElementById('inst-badge').innerText = `ID: ${data.institute.institute_id}`;
-                document.getElementById('inst-title').innerText = data.institute.name;
                 document.getElementById('stat-intake').innerText = data.institute.approved_intake;
                 document.getElementById('stat-confirmed').innerText = data.confirmed_count;
-                const remaining = Math.max(0, data.institute.approved_intake - data.confirmed_count);
-                const remEl = document.getElementById('stat-remaining');
-                if (remEl) remEl.innerText = remaining;
+                const rem = Math.max(0, data.institute.approved_intake - data.confirmed_count);
+                document.getElementById('stat-remaining').innerText = rem;
                 document.getElementById('stat-fill').innerText = `${data.fill_percentage}%`;
-                document.getElementById('stat-progress-bar').style.width = `${Math.min(data.fill_percentage, 100)}%`;
 
+                // Render Canonical Enrolled Master
                 const tbody = document.getElementById('committed-table-body');
                 tbody.innerHTML = '';
                 if (data.students.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">No students committed yet for this academic year.</td></tr>`;
                 } else {
-                    data.students.forEach(s => {
+                    data.students.forEach((s, idx) => {
+                        const avatarColors = ["bg-emerald-700", "bg-amber-600", "bg-peach-500", "bg-slate-800", "bg-indigo-700"];
+                        const c = avatarColors[idx % avatarColors.length];
+                        const initials = s.name.split(' ').map(n => n[0]).join('').substring(0, 2);
+
                         const tr = document.createElement('tr');
+                        tr.className = "hover:bg-slate-50/70 transition";
                         tr.innerHTML = `
-                            <td class="py-2.5 px-4 font-mono font-bold text-indigo-600">#${s.student_id}</td>
-                            <td class="py-2.5 px-4 font-mono">${s.apaar_id}</td>
-                            <td class="py-2.5 px-4 font-semibold text-slate-800">${s.name}</td>
-                            <td class="py-2.5 px-4">${s.course}</td>
-                            <td class="py-2.5 px-4"><span class="bg-slate-100 px-2 py-0.5 rounded text-xs">${s.seat_category}</span></td>
-                            <td class="py-2.5 px-4 font-mono text-slate-500">${s.batch_id}</td>
-                            <td class="py-2.5 px-4 text-slate-500">${s.enrolled_at}</td>
+                            <td class="py-3 px-5 flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full ${c} text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <span class="font-bold text-slate-900 block">${s.name}</span>
+                                    <span class="text-[11px] text-slate-400">AY ${s.academic_year}</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-5 font-mono text-emerald-800 font-bold">#${s.student_id}</td>
+                            <td class="py-3 px-5 font-mono text-slate-700 font-semibold">${s.apaar_id}</td>
+                            <td class="py-3 px-5 text-slate-700 font-medium">${s.course}</td>
+                            <td class="py-3 px-5"><span class="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full text-[11px] font-bold">${s.seat_category}</span></td>
+                            <td class="py-3 px-5 font-mono text-slate-400 text-[11px]">${s.batch_id}</td>
+                            <td class="py-3 px-5">
+                                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center w-max">
+                                    <i class="fa-solid fa-circle-check text-emerald-600 mr-1.5 text-[10px]"></i> Verified
+                                </span>
+                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
@@ -843,22 +1125,22 @@
                 grid.innerHTML = '';
                 data.institutes.forEach(inst => {
                     const card = document.createElement('div');
-                    card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm";
+                    card.className = "bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3";
                     card.innerHTML = `
                         <div class="flex justify-between items-start">
                             <div>
-                                <span class="text-xs font-mono font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">${inst.institute_id}</span>
-                                <h4 class="font-bold text-slate-900 mt-1">${inst.name}</h4>
+                                <span class="text-[11px] font-mono font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">${inst.institute_id}</span>
+                                <h4 class="font-extrabold text-slate-900 mt-1.5">${inst.name}</h4>
                             </div>
-                            <span class="text-xs font-bold text-indigo-600">${inst.fill_percentage}% Full</span>
+                            <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">${inst.fill_percentage}% Full</span>
                         </div>
-                        <div class="mt-4 flex justify-between text-xs text-slate-500">
+                        <div class="flex justify-between text-xs text-slate-500 pt-1">
                             <span>Quota: <strong>${inst.approved_intake}</strong></span>
                             <span>Enrolled: <strong>${inst.enrolled_count}</strong></span>
-                            <span>Prev Year: <strong>${inst.prev_year_intake}</strong></span>
+                            <span>Prev: <strong>${inst.prev_year_intake}</strong></span>
                         </div>
-                        <div class="w-full bg-slate-100 rounded-full h-1.5 mt-2">
-                            <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${Math.min(inst.fill_percentage, 100)}%"></div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-emerald-700 h-1.5 rounded-full" style="width: ${Math.min(inst.fill_percentage, 100)}%"></div>
                         </div>
                     `;
                     grid.appendChild(card);
@@ -868,16 +1150,16 @@
                 const flaggedBody = document.getElementById('aicte-flagged-table-body');
                 flaggedBody.innerHTML = '';
                 if (data.flagged_issues.length === 0) {
-                    flaggedBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">No active flagged issues.</td></tr>`;
+                    flaggedBody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-slate-400">No active cross-institute collisions.</td></tr>`;
                 } else {
                     data.flagged_issues.forEach(f => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td class="py-2.5 px-4 font-semibold text-slate-800">${f.inst_name} (${f.institute_id})</td>
-                            <td class="py-2.5 px-4 font-mono text-slate-500">${f.batch_id}</td>
-                            <td class="py-2.5 px-4 font-mono font-bold text-slate-800">${f.raw_apaar_id}</td>
-                            <td class="py-2.5 px-4">${f.raw_name}</td>
-                            <td class="py-2.5 px-4 font-sans text-amber-800 bg-amber-50 rounded">
+                            <td class="py-3 px-5 font-semibold text-slate-800 font-sans">${f.inst_name} (${f.institute_id})</td>
+                            <td class="py-3 px-5 text-slate-400">${f.batch_id}</td>
+                            <td class="py-3 px-5 font-bold text-slate-900">${f.raw_apaar_id}</td>
+                            <td class="py-3 px-5 font-sans">${f.raw_name}</td>
+                            <td class="py-3 px-5 font-sans text-amber-800 font-medium">
                                 <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-600"></i> ${f.flag_reason}
                             </td>
                         `;
@@ -890,12 +1172,12 @@
                 data.audit_logs.forEach(l => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td class="py-2.5 px-4 font-bold text-slate-700">#${l.log_id}</td>
-                        <td class="py-2.5 px-4 text-slate-500">${l.timestamp}</td>
-                        <td class="py-2.5 px-4"><span class="bg-slate-100 px-1.5 py-0.5 rounded">${l.institute_id || 'AICTE'}</span></td>
-                        <td class="py-2.5 px-4 font-bold text-indigo-700">${l.action}</td>
-                        <td class="py-2.5 px-4 text-slate-600">${l.actor}</td>
-                        <td class="py-2.5 px-4 font-sans text-slate-600">${l.details}</td>
+                        <td class="py-2.5 px-5 font-bold text-slate-700">#${l.log_id}</td>
+                        <td class="py-2.5 px-5 text-slate-400 text-[11px]">${l.timestamp}</td>
+                        <td class="py-2.5 px-5"><span class="bg-slate-100 px-2 py-0.5 rounded text-[11px]">${l.institute_id || 'AICTE'}</span></td>
+                        <td class="py-2.5 px-5 font-bold text-emerald-800">${l.action}</td>
+                        <td class="py-2.5 px-5 text-slate-600">${l.actor}</td>
+                        <td class="py-2.5 px-5 text-slate-600 font-sans text-xs">${l.details}</td>
                     `;
                     auditBody.appendChild(tr);
                 });
@@ -952,7 +1234,16 @@
             }
         }
 
-        // Run session check on load
+        // Filter / Search in committed table
+        function handleSearch(e) {
+            const term = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#committed-table-body tr');
+            rows.forEach(r => {
+                const text = r.innerText.toLowerCase();
+                r.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             checkSession();
         });
