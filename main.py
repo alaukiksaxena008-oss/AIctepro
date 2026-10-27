@@ -137,6 +137,16 @@ def download_sample_csv():
         filename="pune_college_students.csv"
     )
 
+@app.get("/api/download/test-clean-csv")
+def download_test_clean_csv():
+    if not os.path.exists("test_students_to_commit.csv"):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(
+        "test_students_to_commit.csv", 
+        media_type="text/csv", 
+        filename="test_students_to_commit.csv"
+    )
+
 @app.get("/api/batches/{batch_id}")
 def get_batch_details(batch_id: str):
     conn = get_connection()

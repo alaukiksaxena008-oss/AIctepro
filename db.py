@@ -148,7 +148,12 @@ def init_db():
             ('998877665544', 'Ananya Iyer', 'F', '2005-08-30'),
             ('112233445566', 'Kavita Pillai', 'F', '2005-01-15'),
             ('334455667788', 'Vikram Malhotra', 'M', '2004-06-20'),
-            ('556677889900', 'Sameer Verma', 'M', '2005-09-09')
+            ('556677889900', 'Sameer Verma', 'M', '2005-09-09'),
+            ('667788990011', 'Aditya Patil', 'M', '2005-03-14'),
+            ('889900112233', 'Sneha Kulkarni', 'F', '2005-07-21'),
+            ('223344556677', 'Rahul Deshmukh', 'M', '2004-12-05'),
+            ('445566778899', 'Priya Nair', 'F', '2005-05-18'),
+            ('778899001122', 'Tanvi Joshi', 'F', '2005-10-09')
         ])
 
         # Seed existing active student in COEP02 (to demonstrate dual enrolment detection)
