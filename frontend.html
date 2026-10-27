@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICTE National Student Ingestion & APAAR Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .badge-accepted { @apply bg-emerald-100 text-emerald-800 border border-emerald-300; }
+        .badge-rejected { @apply bg-rose-100 text-rose-800 border border-rose-300; }
+        .badge-flagged  { @apply bg-amber-100 text-amber-800 border border-amber-300; }
+        pre, code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- ========================================== -->
+    <!-- 1. LOGIN SCREEN (STEP 1)                   -->
+    <!-- ========================================== -->
+    <div id="screen-login" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <!-- Header Banner -->
+            <div class="bg-indigo-900 p-6 text-white text-center relative">
+                <div class="inline-flex h-14 w-14 bg-amber-500 rounded-xl items-center justify-center font-bold text-2xl text-indigo-950 shadow-md mb-2">
+                    AI
+                </div>
+                <h2 class="text-xl font-bold">AICTE Central Portal</h2>
+                <p class="text-xs text-indigo-200 mt-1">Student Data Ingestion & APAAR Verification Gateway</p>
+                
+                <div class="mt-3 inline-block bg-indigo-800/80 border border-indigo-700 text-indigo-200 text-xs px-3 py-1 rounded-full">
+                    <i class="fa-solid fa-calendar-check mr-1.5 text-amber-400"></i> Active Window: AY 2026-27 Open
+                </div>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <!-- Info Callout -->
+                <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-900">
+                    <p class="font-semibold flex items-center">
+                        <i class="fa-solid fa-shield-halved text-indigo-600 mr-1.5"></i> Step 1: Session-Bound Security
+                    </p>
+                    <p class="text-indigo-700 mt-0.5">
+                        The system looks up your issued account to bind your <code>institute_id</code>. Institutions never type their ID manually, preventing cross-tenant spoofing.
+                    </p>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Username / Account ID</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-user text-xs"></i>
+                            </span>
+                            <input type="text" id="login-username" required class="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="e.g. pct_admin">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1">Issued Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-key text-xs"></i>
+                            </span>
+                            <input type="password" id="login-password" required class="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div id="login-error" class="hidden text-xs text-rose-600 bg-rose-50 border border-rose-200 p-2 rounded"></div>
+
+                    <button type="submit" id="btn-login-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm shadow transition flex items-center justify-center">
+                        <i class="fa-solid fa-right-to-bracket mr-2"></i> Log In to Portal
+                    </button>
+                </form>
+
+                <!-- Quick One-Click Demo Buttons -->
+                <div class="pt-3 border-t border-slate-200">
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide text-center mb-2">Quick One-Click Demo Login</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-2 border border-slate-200 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+                            <span class="font-bold text-slate-800 block">Pune College of Tech</span>
+                            <span class="text-slate-500 text-[11px]">PCT01 • College Admin</span>
+                        </button>
+                        <button type="button" onclick="quickLogin('aicte_officer', 'aicte123')" class="p-2 border border-slate-200 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+                            <span class="font-bold text-slate-800 block">AICTE Central Officer</span>
+                            <span class="text-slate-500 text-[11px]">Apex Regulatory Oversight</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. MAIN APPLICATION (AFTER LOGIN)          -->
+    <!-- ========================================== -->
+    <div id="screen-app" class="hidden flex-col min-h-screen">
+        
+        <!-- Top Nav Bar -->
+        <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-xl text-indigo-950 shadow">
+                        AI
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base md:text-lg leading-tight">AICTE Ingestion & APAAR Gateway</h1>
+                        <p class="text-[11px] text-indigo-200">Staging Decoupling • Multi-Tier Verification</p>
+                    </div>
+                </div>
+
+                <!-- Nav Controls & User Session Info -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    
+                    <!-- Tabs -->
+                    <div class="flex items-center space-x-1">
+                        <button onclick="setTab('college')" id="tab-btn-college" class="px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow">
+                            <i class="fa-solid fa-building-columns mr-1"></i> College View
+                        </button>
+                        <button onclick="setTab('aicte')" id="tab-btn-aicte" class="px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> AICTE Apex
+                        </button>
+                        <button onclick="setTab('sql')" id="tab-btn-sql" class="px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800">
+                            <i class="fa-solid fa-terminal mr-1"></i> DB Explorer
+                        </button>
+                    </div>
+
+                    <!-- User Session Pill -->
+                    <div class="hidden md:flex items-center bg-indigo-950/60 border border-indigo-700/60 px-3 py-1 rounded-full text-xs">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 mr-2"></span>
+                        <div class="text-left">
+                            <span class="font-bold text-slate-100" id="nav-user-name">User</span>
+                            <span class="text-indigo-300 ml-1" id="nav-inst-id"></span>
+                        </div>
+                    </div>
+
+                    <!-- Logout Button -->
+                    <button onclick="logout()" title="Logout" class="px-2.5 py-1.5 bg-rose-900/60 hover:bg-rose-800 border border-rose-700/50 text-rose-200 hover:text-white rounded-lg text-xs font-medium transition flex items-center">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+
+            <!-- ========================================== -->
+            <!-- TAB 1: COLLEGE VIEW                        -->
+            <!-- ========================================== -->
+            <div id="view-college" class="space-y-6">
+                
+                <!-- College Session Status Banner -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded" id="inst-badge">ID: PCT01</span>
+                            <span class="text-xs text-slate-500" id="inst-session-year">• Academic Year 2026-27 Active</span>
+                        </div>
+                        <h2 class="text-xl font-bold text-slate-900 mt-1" id="inst-title">Pune College of Technology</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            <i class="fa-solid fa-lock text-emerald-600 mr-1"></i>
+                            Session strictly bound to Institute ID. You cannot type or tamper with this ID.
+                        </p>
+                    </div>
+
+                    <!-- Intake Gauge -->
+                    <div class="flex items-center space-x-6 w-full md:w-auto bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div>
+                            <p class="text-[11px] text-slate-500 uppercase font-medium tracking-wide">Approved Intake</p>
+                            <p class="text-2xl font-bold text-slate-800" id="stat-intake">60</p>
+                        </div>
+                        <div class="h-8 border-r border-slate-300"></div>
+                        <div>
+                            <p class="text-[11px] text-slate-500 uppercase font-medium tracking-wide">Confirmed Enrolled</p>
+                            <p class="text-2xl font-bold text-indigo-600" id="stat-confirmed">0</p>
+                        </div>
+                        <div class="h-8 border-r border-slate-300"></div>
+                        <div class="w-32">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-500">Filled</span>
+                                <span class="font-bold text-slate-700" id="stat-fill">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                                <div id="stat-progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Upload Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- Upload Input Card -->
+                    <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-slate-900 flex items-center text-sm">
+                                <i class="fa-solid fa-cloud-arrow-up text-indigo-600 mr-2"></i>
+                                Step 2: Upload Student Sheet
+                            </h3>
+                            <button onclick="loadExampleData()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded transition">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Fill Prompt Example
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-500">
+                            Paste TSV/CSV format: <code>apaar_id, name, course, seat_category</code>. Files enter a <strong>staging area</strong> first; nothing touches the official student table until validation passes.
+                        </p>
+
+                        <textarea id="upload-data" rows="8" class="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="apaar_id,name,course,seat_category
+482910563721,Aarav Sharma,B.Tech,General
+..."></textarea>
+
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-xs text-slate-400" id="row-count-preview">Ready to stage</span>
+                            <button onclick="submitBatch()" id="btn-submit-batch" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm shadow transition flex items-center">
+                                <span>Process In Staging</span>
+                                <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Checks in Order Explainer -->
+                    <div class="lg:col-span-7 bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                        <h3 class="font-bold text-slate-900 flex items-center text-sm">
+                            <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i>
+                            Step 3: Verification Checks in Order
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="font-semibold text-slate-800 flex items-center">
+                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">1</span>
+                                    Format Check (No table)
+                                </div>
+                                <p class="text-slate-500 mt-1">Regex check: exactly 12 numeric digits. Invalid IDs (e.g. <code>12345</code>) are rejected immediately.</p>
+                            </div>
+
+                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="font-semibold text-slate-800 flex items-center">
+                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">2</span>
+                                    Registry Check (apaar_registry)
+                                </div>
+                                <p class="text-slate-500 mt-1">Queries national master. Rejects if not found (e.g. <code>903817265540</code>); flags if candidate name differs from official record.</p>
+                            </div>
+
+                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="font-semibold text-slate-800 flex items-center">
+                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">3</span>
+                                    Redundancy Check (staging & students)
+                                </div>
+                                <p class="text-slate-500 mt-1">Rejects duplicate in file (Aarav #2). Rejects if already enrolled in PCT. Flags if active at another college (Vikram at COEP).</p>
+                            </div>
+
+                            <div class="p-3 rounded-lg border border-slate-200 bg-slate-50">
+                                <div class="font-semibold text-slate-800 flex items-center">
+                                    <span class="w-5 h-5 bg-indigo-200 text-indigo-800 rounded-full inline-flex items-center justify-center text-xs mr-1.5 font-bold">4</span>
+                                    Intake & Anomaly Check (institutes)
+                                </div>
+                                <p class="text-slate-500 mt-1">Verifies approved quota and flags large YoY surges (>50%) for AICTE officer review.</p>
+                            </div>
+                        </div>
+
+                        <!-- Active Batch Result Card -->
+                        <div id="batch-summary-card" class="hidden mt-4 p-4 rounded-lg bg-indigo-50 border border-indigo-200">
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <div>
+                                    <span class="text-xs font-semibold text-indigo-900" id="current-batch-id">Batch: BATCH-XXXX</span>
+                                    <div class="flex items-center space-x-3 mt-1 text-xs">
+                                        <span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i><span id="badge-acc-count">0</span> Accepted</span>
+                                        <span class="text-rose-700 font-bold"><i class="fa-solid fa-circle-xmark mr-1"></i><span id="badge-rej-count">0</span> Rejected</span>
+                                        <span class="text-amber-700 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i><span id="badge-flg-count">0</span> Flagged</span>
+                                    </div>
+                                </div>
+                                <button onclick="commitActiveBatch()" id="btn-commit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg text-sm shadow transition flex items-center">
+                                    <i class="fa-solid fa-database mr-2"></i> Commit Accepted to Official DB
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staging Row Results Table (Step 4) -->
+                <div id="staging-results-container" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hidden">
+                    <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-sm">Step 4: Result Shown to College (Staging Report)</h3>
+                            <p class="text-xs text-slate-500">One bad row doesn’t block the good ones. Fix rejected rows and re-upload just those.</p>
+                        </div>
+                        <span id="commit-status-tag" class="text-xs font-semibold px-2.5 py-1 rounded bg-slate-200 text-slate-700">STAGED</span>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="py-3 px-4">#</th>
+                                    <th class="py-3 px-4">APAAR ID</th>
+                                    <th class="py-3 px-4">Student Name</th>
+                                    <th class="py-3 px-4">Course & Category</th>
+                                    <th class="py-3 px-4">Outcome</th>
+                                    <th class="py-3 px-4">Validation Diagnosis / Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staging-table-body" class="divide-y divide-slate-100 font-mono">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Canonical Database Table (Step 5 & 6) -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-200 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-sm">Step 6: Official Enrolled Students Master (students table)</h3>
+                            <p class="text-xs text-slate-500">Live canonical records committed into AICTE central database.</p>
+                        </div>
+                        <button onclick="refreshCollegeDashboard()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold">
+                            <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh Table
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="py-3 px-4">Student ID (PK)</th>
+                                    <th class="py-3 px-4">APAAR ID</th>
+                                    <th class="py-3 px-4">Name</th>
+                                    <th class="py-3 px-4">Course</th>
+                                    <th class="py-3 px-4">Category</th>
+                                    <th class="py-3 px-4">Batch ID</th>
+                                    <th class="py-3 px-4">Enrolled At</th>
+                                </tr>
+                            </thead>
+                            <tbody id="committed-table-body" class="divide-y divide-slate-100">
+                                <tr><td colspan="7" class="py-4 text-center text-slate-400">Loading enrolled records...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: AICTE APEX VIEW                     -->
+            <!-- ========================================== -->
+            <div id="view-aicte" class="hidden space-y-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">AICTE Apex Authority</span>
+                        <span class="text-xs text-slate-500">• National Oversight & Governance Dashboard</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1">Institutions & Cross-Enrolment Surveillance</h2>
+                    <p class="text-xs text-slate-500">Centralized detection of dual-enrolments, capacity breaches, and statistical intake anomalies across all institutes.</p>
+                </div>
+
+                <!-- Institutes Overview Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="aicte-institutes-grid">
+                    <!-- Dynamic -->
+                </div>
+
+                <!-- Flagged Incidents Queue -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-200 bg-amber-50 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-amber-950 text-sm flex items-center">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-2"></i>
+                                Flagged for AICTE Reviewer Action
+                            </h3>
+                            <p class="text-xs text-amber-800">Dual-enrolment collisions, name mismatches, and excess capacity warnings.</p>
+                        </div>
+                        <span class="text-xs font-semibold px-2 py-0.5 bg-amber-200 text-amber-900 rounded" id="aicte-flagged-count">0 items</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="py-3 px-4">Institute</th>
+                                    <th class="py-3 px-4">Batch ID</th>
+                                    <th class="py-3 px-4">APAAR ID</th>
+                                    <th class="py-3 px-4">Uploaded Name</th>
+                                    <th class="py-3 px-4">Flag Diagnosis</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aicte-flagged-table-body" class="divide-y divide-slate-100">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Regulatory Audit Trail -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center">
+                            <i class="fa-solid fa-clipboard-check text-indigo-600 mr-2"></i>
+                            Immutable Regulatory Audit Log (audit_logs table)
+                        </h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-slate-100 text-slate-600 uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="py-3 px-4">Log ID (PK)</th>
+                                    <th class="py-3 px-4">Timestamp</th>
+                                    <th class="py-3 px-4">Institute</th>
+                                    <th class="py-3 px-4">Action</th>
+                                    <th class="py-3 px-4">Actor</th>
+                                    <th class="py-3 px-4">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aicte-audit-table-body" class="divide-y divide-slate-100">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 3: DB QUERY EXPLORER                   -->
+            <!-- ========================================== -->
+            <div id="view-sql" class="hidden space-y-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 space-y-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">SQLite Database Query Explorer</h2>
+                        <p class="text-xs text-slate-500">Directly query the database tables to inspect primary keys, foreign keys, staging buffers, and audit trails.</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="text-slate-500 self-center font-medium">Quick Presets:</span>
+                        <button onclick="setQuery('SELECT * FROM students;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            students (Master)
+                        </button>
+                        <button onclick="setQuery('SELECT * FROM staging_rows ORDER BY row_id DESC LIMIT 20;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            staging_rows
+                        </button>
+                        <button onclick="setQuery('SELECT * FROM users;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            users (Auth & Session)
+                        </button>
+                        <button onclick="setQuery('SELECT * FROM apaar_registry;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            apaar_registry
+                        </button>
+                        <button onclick="setQuery('SELECT * FROM staging_batches;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            staging_batches
+                        </button>
+                        <button onclick="setQuery('SELECT * FROM institutes;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            institutes
+                        </button>
+                        <button onclick="setQuery('SELECT * FROM audit_logs ORDER BY timestamp DESC;')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border border-slate-300">
+                            audit_logs
+                        </button>
+                    </div>
+
+                    <div class="space-y-2">
+                        <textarea id="sql-input" rows="4" class="w-full text-xs font-mono p-3 bg-slate-900 text-emerald-400 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" spellcheck="false">SELECT * FROM students;</textarea>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-400" id="query-meta">Ready</span>
+                            <button onclick="executeSQL()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-xs shadow transition">
+                                <i class="fa-solid fa-play mr-1.5"></i> Run SQL Query
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="px-5 py-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                        <span class="text-xs font-semibold text-slate-700">Query Output Grid</span>
+                        <span class="text-xs text-slate-500" id="result-row-count">0 rows</span>
+                    </div>
+                    <div class="overflow-x-auto max-h-96">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b border-slate-200" id="sql-table-head">
+                                <tr><th class="py-2.5 px-4">Execute a query above to view results</th></tr>
+                            </thead>
+                            <tbody id="sql-table-body" class="divide-y divide-slate-100">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        let currentSession = null;
+        let activeBatchId = null;
+
+        // --- AUTHENTICATION & LOGIN (STEP 1) ---
+        function checkSession() {
+            const saved = sessionStorage.getItem('aicte_session');
+            if (saved) {
+                try {
+                    currentSession = JSON.parse(saved);
+                    showAppScreen();
+                    return;
+                } catch(e) {
+                    sessionStorage.removeItem('aicte_session');
+                }
+            }
+            showLoginScreen();
+        }
+
+        function showLoginScreen() {
+            document.getElementById('screen-login').classList.remove('hidden');
+            document.getElementById('screen-app').classList.add('hidden');
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function showAppScreen() {
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-app').classList.remove('hidden');
+
+            document.getElementById('nav-user-name').innerText = currentSession.full_name;
+            document.getElementById('nav-inst-id').innerText = currentSession.institute_id ? `(${currentSession.institute_id})` : '(AICTE Central)';
+
+            if (currentSession.role === 'AICTE_OFFICER') {
+                setTab('aicte');
+            } else {
+                setTab('college');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value.trim();
+            const p = document.getElementById('login-password').value.trim();
+            const errBox = document.getElementById('login-error');
+            const btn = document.getElementById('btn-login-submit');
+
+            errBox.classList.add('hidden');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Authenticating...`;
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Authentication failed");
+
+                currentSession = data;
+                sessionStorage.setItem('aicte_session', JSON.stringify(data));
+                showAppScreen();
+            } catch (err) {
+                errBox.innerText = err.message;
+                errBox.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-2"></i> Log In to Portal`;
+            }
+        }
+
+        function quickLogin(username, password) {
+            document.getElementById('login-username').value = username;
+            document.getElementById('login-password').value = password;
+            document.getElementById('login-form').dispatchEvent(new Event('submit'));
+        }
+
+        function logout() {
+            sessionStorage.removeItem('aicte_session');
+            currentSession = null;
+            showLoginScreen();
+        }
+
+        // --- TABS & NAVIGATION ---
+        function setTab(tab) {
+            document.getElementById('view-college').classList.toggle('hidden', tab !== 'college');
+            document.getElementById('view-aicte').classList.toggle('hidden', tab !== 'aicte');
+            document.getElementById('view-sql').classList.toggle('hidden', tab !== 'sql');
+
+            document.getElementById('tab-btn-college').className = tab === 'college' 
+                ? "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow"
+                : "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800";
+            
+            document.getElementById('tab-btn-aicte').className = tab === 'aicte' 
+                ? "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow"
+                : "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800";
+
+            document.getElementById('tab-btn-sql').className = tab === 'sql' 
+                ? "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition bg-indigo-700 text-white shadow"
+                : "px-3 py-1.5 rounded text-xs sm:text-sm font-medium transition text-indigo-200 hover:text-white hover:bg-indigo-800";
+
+            if (tab === 'aicte') loadAICTEOverview();
+            if (tab === 'college') refreshCollegeDashboard();
+            if (tab === 'sql') executeSQL();
+        }
+
+        // Load exact example from user prompt
+        function loadExampleData() {
+            const sample = 
+`apaar_id,name,course,seat_category
+482910563721,Aarav Sharma,B.Tech,General
+482910563721,Aarav Sharma,B.Tech,General
+12345,Diya Patel,B.Tech,General
+771203948856,Rohan Das,B.Tech,NRI
+903817265540,Meera Reddy,B.Tech,General
+334455667788,Vikram Malhotra,B.Tech,General`;
+            document.getElementById('upload-data').value = sample;
+            document.getElementById('row-count-preview').innerText = "Loaded 6 test rows (includes format error, duplicate, registry missing, dual-enrolment)";
+        }
+
+        // --- STEP 2: UPLOAD BATCH TO STAGING ---
+        async function submitBatch() {
+            const raw = document.getElementById('upload-data').value.trim();
+            if (!raw) {
+                alert("Please enter or paste student rows first!");
+                return;
+            }
+
+            const instId = (currentSession && currentSession.institute_id) ? currentSession.institute_id : 'PCT01';
+            const userEmail = currentSession ? currentSession.username : 'admin@pct.ac.in';
+
+            const formData = new FormData();
+            formData.append('institute_id', instId);
+            formData.append('academic_year', '2026-27');
+            formData.append('uploaded_by', userEmail);
+            formData.append('file_content', raw);
+
+            const btn = document.getElementById('btn-submit-batch');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying in Staging...`;
+
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Upload error");
+
+                activeBatchId = data.batch_id;
+                document.getElementById('batch-summary-card').classList.remove('hidden');
+                document.getElementById('current-batch-id').innerText = `Batch ID: ${data.batch_id} (Staged)`;
+                document.getElementById('badge-acc-count').innerText = data.accepted;
+                document.getElementById('badge-rej-count').innerText = data.rejected;
+                document.getElementById('badge-flg-count').innerText = data.flagged;
+
+                await loadBatchDetails(data.batch_id);
+                refreshCollegeDashboard();
+            } catch (err) {
+                alert("Error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Process In Staging</span><i class="fa-solid fa-arrow-right ml-2 text-xs"></i>`;
+            }
+        }
+
+        // --- STEP 4: LOAD STAGING REPORT ---
+        async function loadBatchDetails(batchId) {
+            const res = await fetch(`/api/batches/${batchId}`);
+            const data = await res.json();
+            
+            const container = document.getElementById('staging-results-container');
+            container.classList.remove('hidden');
+
+            const statusTag = document.getElementById('commit-status-tag');
+            statusTag.innerText = data.batch.status;
+            statusTag.className = data.batch.status === 'COMMITTED' 
+                ? "text-xs font-semibold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800"
+                : "text-xs font-semibold px-2.5 py-1 rounded bg-slate-200 text-slate-700";
+
+            const tbody = document.getElementById('staging-table-body');
+            tbody.innerHTML = '';
+
+            data.rows.forEach(r => {
+                let badgeClass = "badge-accepted";
+                let icon = "fa-circle-check text-emerald-600";
+                if (r.validation_status === 'REJECTED') {
+                    badgeClass = "badge-rejected";
+                    icon = "fa-circle-xmark text-rose-600";
+                } else if (r.validation_status === 'FLAGGED') {
+                    badgeClass = "badge-flagged";
+                    icon = "fa-triangle-exclamation text-amber-600";
+                }
+
+                const reason = r.rejection_reason || r.flag_reason || "Passed all checks (format, registry, redundancy, intake quota).";
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2.5 px-4 font-sans text-slate-500">${r.row_num}</td>
+                    <td class="py-2.5 px-4 font-bold text-slate-800">${r.raw_apaar_id}</td>
+                    <td class="py-2.5 px-4 font-sans font-medium text-slate-900">${r.raw_name}</td>
+                    <td class="py-2.5 px-4 font-sans text-slate-600">${r.course} <span class="text-[11px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded ml-1">${r.seat_category}</span></td>
+                    <td class="py-2.5 px-4">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${badgeClass}">
+                            <i class="fa-solid ${icon} mr-1"></i> ${r.validation_status}
+                        </span>
+                    </td>
+                    <td class="py-2.5 px-4 font-sans text-slate-600 text-xs">${reason}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- STEP 5: COMMIT ACCEPTED ROWS ---
+        async function commitActiveBatch() {
+            if (!activeBatchId) return;
+
+            const instId = (currentSession && currentSession.institute_id) ? currentSession.institute_id : 'PCT01';
+            const userEmail = currentSession ? currentSession.username : 'admin@pct.ac.in';
+
+            const btn = document.getElementById('btn-commit');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Committing to Master...`;
+
+            try {
+                const res = await fetch('/api/commit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        batch_id: activeBatchId,
+                        institute_id: instId,
+                        actor: userEmail
+                    })
+                });
+                const data = await res.json();
+                alert(data.message);
+                await loadBatchDetails(activeBatchId);
+                await refreshCollegeDashboard();
+            } catch (err) {
+                alert("Commit error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-database mr-2"></i> Commit Accepted to Official DB`;
+            }
+        }
+
+        // --- REFRESH COLLEGE DASHBOARD ---
+        async function refreshCollegeDashboard() {
+            const instId = (currentSession && currentSession.institute_id) ? currentSession.institute_id : 'PCT01';
+
+            try {
+                const res = await fetch(`/api/dashboard/${instId}`);
+                const data = await res.json();
+
+                document.getElementById('inst-badge').innerText = `ID: ${data.institute.institute_id}`;
+                document.getElementById('inst-title').innerText = data.institute.name;
+                document.getElementById('stat-intake').innerText = data.institute.approved_intake;
+                document.getElementById('stat-confirmed').innerText = data.confirmed_count;
+                document.getElementById('stat-fill').innerText = `${data.fill_percentage}%`;
+                document.getElementById('stat-progress-bar').style.width = `${Math.min(data.fill_percentage, 100)}%`;
+
+                const tbody = document.getElementById('committed-table-body');
+                tbody.innerHTML = '';
+                if (data.students.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-slate-400">No students committed yet for this academic year.</td></tr>`;
+                } else {
+                    data.students.forEach(s => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="py-2.5 px-4 font-mono font-bold text-indigo-600">#${s.student_id}</td>
+                            <td class="py-2.5 px-4 font-mono">${s.apaar_id}</td>
+                            <td class="py-2.5 px-4 font-semibold text-slate-800">${s.name}</td>
+                            <td class="py-2.5 px-4">${s.course}</td>
+                            <td class="py-2.5 px-4"><span class="bg-slate-100 px-2 py-0.5 rounded text-xs">${s.seat_category}</span></td>
+                            <td class="py-2.5 px-4 font-mono text-slate-500">${s.batch_id}</td>
+                            <td class="py-2.5 px-4 text-slate-500">${s.enrolled_at}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {
+                console.error("Dashboard refresh failed", e);
+            }
+        }
+
+        // --- AICTE OVERVIEW ---
+        async function loadAICTEOverview() {
+            try {
+                const res = await fetch('/api/aicte-overview');
+                const data = await res.json();
+
+                const grid = document.getElementById('aicte-institutes-grid');
+                grid.innerHTML = '';
+                data.institutes.forEach(inst => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-mono font-bold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">${inst.institute_id}</span>
+                                <h4 class="font-bold text-slate-900 mt-1">${inst.name}</h4>
+                            </div>
+                            <span class="text-xs font-bold text-indigo-600">${inst.fill_percentage}% Full</span>
+                        </div>
+                        <div class="mt-4 flex justify-between text-xs text-slate-500">
+                            <span>Quota: <strong>${inst.approved_intake}</strong></span>
+                            <span>Enrolled: <strong>${inst.enrolled_count}</strong></span>
+                            <span>Prev Year: <strong>${inst.prev_year_intake}</strong></span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-1.5 mt-2">
+                            <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${Math.min(inst.fill_percentage, 100)}%"></div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                document.getElementById('aicte-flagged-count').innerText = `${data.flagged_issues.length} items`;
+                const flaggedBody = document.getElementById('aicte-flagged-table-body');
+                flaggedBody.innerHTML = '';
+                if (data.flagged_issues.length === 0) {
+                    flaggedBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">No active flagged issues.</td></tr>`;
+                } else {
+                    data.flagged_issues.forEach(f => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="py-2.5 px-4 font-semibold text-slate-800">${f.inst_name} (${f.institute_id})</td>
+                            <td class="py-2.5 px-4 font-mono text-slate-500">${f.batch_id}</td>
+                            <td class="py-2.5 px-4 font-mono font-bold text-slate-800">${f.raw_apaar_id}</td>
+                            <td class="py-2.5 px-4">${f.raw_name}</td>
+                            <td class="py-2.5 px-4 font-sans text-amber-800 bg-amber-50 rounded">
+                                <i class="fa-solid fa-triangle-exclamation mr-1 text-amber-600"></i> ${f.flag_reason}
+                            </td>
+                        `;
+                        flaggedBody.appendChild(tr);
+                    });
+                }
+
+                const auditBody = document.getElementById('aicte-audit-table-body');
+                auditBody.innerHTML = '';
+                data.audit_logs.forEach(l => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-4 font-bold text-slate-700">#${l.log_id}</td>
+                        <td class="py-2.5 px-4 text-slate-500">${l.timestamp}</td>
+                        <td class="py-2.5 px-4"><span class="bg-slate-100 px-1.5 py-0.5 rounded">${l.institute_id || 'AICTE'}</span></td>
+                        <td class="py-2.5 px-4 font-bold text-indigo-700">${l.action}</td>
+                        <td class="py-2.5 px-4 text-slate-600">${l.actor}</td>
+                        <td class="py-2.5 px-4 font-sans text-slate-600">${l.details}</td>
+                    `;
+                    auditBody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error("AICTE Overview failed", err);
+            }
+        }
+
+        // --- SQL EXPLORER ---
+        function setQuery(sql) {
+            document.getElementById('sql-input').value = sql;
+            executeSQL();
+        }
+
+        async function executeSQL() {
+            const sql = document.getElementById('sql-input').value.trim();
+            const meta = document.getElementById('query-meta');
+            const thead = document.getElementById('sql-table-head');
+            const tbody = document.getElementById('sql-table-body');
+            const countSpan = document.getElementById('result-row-count');
+
+            meta.innerText = "Executing query...";
+
+            try {
+                const res = await fetch('/api/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: sql })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || "Query failed");
+
+                meta.innerText = `Success (${data.count} rows returned)`;
+                countSpan.innerText = `${data.count} rows`;
+
+                thead.innerHTML = `<tr>${data.columns.map(c => `<th class="py-2.5 px-4 bg-slate-100 border-b border-slate-200">${c}</th>`).join('')}</tr>`;
+
+                tbody.innerHTML = '';
+                if (data.rows.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="${data.columns.length || 1}" class="py-4 text-center text-slate-400">0 rows returned.</td></tr>`;
+                } else {
+                    data.rows.forEach(r => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = data.columns.map(c => `<td class="py-2 px-4 border-b border-slate-100 text-slate-700">${r[c] !== null ? r[c] : '<span class="text-slate-300">NULL</span>'}</td>`).join('');
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (err) {
+                meta.innerText = `Error: ${err.message}`;
+                thead.innerHTML = `<tr><th class="py-2.5 px-4 text-rose-600">Error executing query</th></tr>`;
+                tbody.innerHTML = `<tr><td class="py-4 px-4 text-rose-600 font-mono text-xs">${err.message}</td></tr>`;
+                countSpan.innerText = "0 rows";
+            }
+        }
+
+        // Run session check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkSession();
+        });
+    </script>
+</body>
+</html>
