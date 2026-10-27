@@ -290,13 +290,13 @@
                     </button>
 
                     <!-- Students Profile / Canonical Master -->
-                    <button onclick="scrollToCanonical()" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                    <button onclick="scrollToCanonical()" id="nav-item-students" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
                         <i class="fa-regular fa-id-card text-slate-400 w-5 text-center"></i>
                         <span>Students profile</span>
                     </button>
 
-                    <!-- AICTE Apex Surveillance -->
-                    <button onclick="setTab('aicte')" id="nav-item-aicte" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                    <!-- AICTE Apex Surveillance (Strictly for AICTE Central Officer) -->
+                    <button onclick="setTab('aicte')" id="nav-item-aicte" class="hidden w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
                         <i class="fa-solid fa-shield-halved text-slate-400 w-5 text-center"></i>
                         <span>AICTE Apex</span>
                     </button>
@@ -988,9 +988,20 @@
                 document.getElementById('hero-inst-name').innerText = currentSession.institute_name || currentSession.institute_id;
             }
 
+            const aicteTab = document.getElementById('nav-item-aicte');
+            const collegeTab = document.getElementById('nav-item-college');
+            const studentsTab = document.getElementById('nav-item-students');
+
             if (currentSession.role === 'AICTE_OFFICER') {
+                if (aicteTab) aicteTab.classList.remove('hidden');
+                if (collegeTab) collegeTab.classList.add('hidden');
+                if (studentsTab) studentsTab.classList.add('hidden');
                 setTab('aicte');
             } else {
+                // College Admin: AICTE Apex is strictly hidden
+                if (aicteTab) aicteTab.classList.add('hidden');
+                if (collegeTab) collegeTab.classList.remove('hidden');
+                if (studentsTab) studentsTab.classList.remove('hidden');
                 setTab('college');
             }
         }
@@ -1041,6 +1052,11 @@
 
         // --- NAVIGATION TABS ---
         function setTab(tab) {
+            // Strict Role Guard: Only AICTE Central Officers can access AICTE Apex
+            if (tab === 'aicte' && (!currentSession || currentSession.role !== 'AICTE_OFFICER')) {
+                tab = 'college';
+            }
+
             document.getElementById('view-college').classList.toggle('hidden', tab !== 'college');
             document.getElementById('view-aicte').classList.toggle('hidden', tab !== 'aicte');
             document.getElementById('view-sql').classList.toggle('hidden', tab !== 'sql');
