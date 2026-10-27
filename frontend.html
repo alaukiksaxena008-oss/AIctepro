@@ -237,14 +237,18 @@
             <!-- Quick Demo One-Click Fill -->
             <div class="pt-4 border-t border-slate-100">
                 <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center mb-3">One-Click Demonstration Logins</p>
-                <div class="grid grid-cols-2 gap-2.5 text-xs">
-                    <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-3 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <button type="button" onclick="quickLogin('pct_admin', 'pct123')" class="p-2.5 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
                         <span class="font-bold text-slate-800 group-hover:text-emerald-900 block truncate">Pune College Tech</span>
-                        <span class="text-slate-500 text-[10px]">ID: PCT01 (60 Quota)</span>
+                        <span class="text-slate-500 text-[10px]">PCT01 (60 cap)</span>
                     </button>
-                    <button type="button" onclick="quickLogin('coep_admin', 'coep123')" class="p-3 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
+                    <button type="button" onclick="quickLogin('coep_admin', 'coep123')" class="p-2.5 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition group">
                         <span class="font-bold text-slate-800 group-hover:text-emerald-900 block truncate">COEP Pune</span>
-                        <span class="text-slate-500 text-[10px]">ID: COEP02 (120 Quota)</span>
+                        <span class="text-slate-500 text-[10px]">COEP02 (120 cap)</span>
+                    </button>
+                    <button type="button" onclick="quickLogin('aicte_officer', 'aicte123')" class="p-2.5 border border-slate-200 rounded-2xl bg-slate-50 hover:bg-amber-50 hover:border-amber-300 text-left transition group">
+                        <span class="font-bold text-slate-800 group-hover:text-amber-900 block truncate">AICTE Officer</span>
+                        <span class="text-slate-500 text-[10px]">Apex Regulator</span>
                     </button>
                 </div>
             </div>
@@ -289,6 +293,12 @@
                     <button onclick="scrollToCanonical()" id="nav-item-students" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
                         <i class="fa-regular fa-id-card text-slate-400 w-5 text-center"></i>
                         <span>Students profile</span>
+                    </button>
+
+                    <!-- AICTE Apex Surveillance (Strictly for AICTE Central Officer) -->
+                    <button onclick="setTab('aicte')" id="nav-item-aicte" class="hidden w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-shield-halved text-slate-400 w-5 text-center"></i>
+                        <span>AICTE Apex</span>
                     </button>
 
                     <!-- DB Explorer Tab -->
@@ -488,15 +498,15 @@
                                 </div>
                             </div>
 
-                            <!-- Quick Switch College -->
+                            <!-- Quick Switch Tenant Actions -->
                             <div class="space-y-1.5 pt-1">
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch College Demo</p>
-                                <button onclick="quickLogin('pct_admin', 'pct123')" class="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 text-xs transition">
-                                    <span class="font-semibold text-slate-800">Switch to PCT01</span>
-                                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
-                                </button>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Switch Demonstration Account</p>
                                 <button onclick="quickLogin('coep_admin', 'coep123')" class="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200/60 text-xs transition">
                                     <span class="font-semibold text-slate-800">Switch to COEP02</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                                </button>
+                                <button onclick="quickLogin('aicte_officer', 'aicte123')" class="w-full flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200/60 text-xs transition">
+                                    <span class="font-semibold text-slate-800">Switch to AICTE Officer</span>
                                     <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
                                 </button>
                             </div>
@@ -798,6 +808,81 @@
             </div>
 
             <!-- ======================================== -->
+            <!-- TAB: AICTE APEX SURVEILLANCE             -->
+            <!-- ======================================== -->
+            <div id="view-aicte" class="hidden space-y-6">
+                <div class="hero-gradient rounded-3xl p-6 md:p-8 text-white shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-semibold">Apex Regulatory Body</span>
+                        <h2 class="text-2xl font-extrabold mt-1">National Multi-Institute Governance</h2>
+                        <p class="text-xs text-white/80 mt-1">Central surveillance of sanctioned intake, cross-enrolments, and regulatory audit trail.</p>
+                    </div>
+                    <button onclick="loadAICTEOverview()" class="bg-white text-emerald-950 font-bold px-4 py-2 rounded-full text-xs shadow-md">
+                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh Nationwide Data
+                    </button>
+                </div>
+
+                <!-- Institutes Overview Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="aicte-institutes-grid">
+                    <!-- Dynamic -->
+                </div>
+
+                <!-- Flagged Collisions Queue -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-amber-50/60">
+                        <div>
+                            <h3 class="font-extrabold text-amber-950 text-base flex items-center">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-2"></i>
+                                Flagged Incidents Queue (Cross-Institute Collisions)
+                            </h3>
+                            <p class="text-xs text-amber-800">Requires review before dual admission is approved.</p>
+                        </div>
+                        <span class="text-xs font-bold px-3 py-1 bg-amber-200 text-amber-900 rounded-full" id="aicte-flagged-count">0 items</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
+                                <tr>
+                                    <th class="py-3 px-5">Institute</th>
+                                    <th class="py-3 px-5">Batch ID</th>
+                                    <th class="py-3 px-5">APAAR ID</th>
+                                    <th class="py-3 px-5">Uploaded Name</th>
+                                    <th class="py-3 px-5">Flag Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aicte-flagged-table-body" class="divide-y divide-slate-100 font-mono">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Regulatory Audit Ledger -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="font-extrabold text-slate-900 text-base">Immutable Regulatory Audit Log (audit_logs table)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
+                                <tr>
+                                    <th class="py-3 px-5">Log ID</th>
+                                    <th class="py-3 px-5">Timestamp</th>
+                                    <th class="py-3 px-5">Institute</th>
+                                    <th class="py-3 px-5">Action</th>
+                                    <th class="py-3 px-5">Actor</th>
+                                    <th class="py-3 px-5">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="aicte-audit-table-body" class="divide-y divide-slate-100">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================== -->
             <!-- TAB: DATABASE SQL QUERY EXPLORER         -->
             <!-- ======================================== -->
             <div id="view-sql" class="hidden space-y-6">
@@ -907,7 +992,18 @@
             const collegeTab = document.getElementById('nav-item-college');
             const studentsTab = document.getElementById('nav-item-students');
 
-            setTab('college');
+            if (currentSession.role === 'AICTE_OFFICER') {
+                if (aicteTab) { aicteTab.style.display = 'flex'; aicteTab.classList.remove('hidden'); }
+                if (collegeTab) { collegeTab.style.display = 'none'; collegeTab.classList.add('hidden'); }
+                if (studentsTab) { studentsTab.style.display = 'none'; studentsTab.classList.add('hidden'); }
+                setTab('aicte');
+            } else {
+                // College Admin: Strictly remove & hide AICTE Apex from sidebar
+                if (aicteTab) { aicteTab.style.display = 'none'; aicteTab.classList.add('hidden'); }
+                if (collegeTab) { collegeTab.style.display = 'flex'; collegeTab.classList.remove('hidden'); }
+                if (studentsTab) { studentsTab.style.display = 'flex'; studentsTab.classList.remove('hidden'); }
+                setTab('college');
+            }
         }
 
         async function handleLogin(e) {
@@ -956,17 +1052,38 @@
 
         // --- NAVIGATION TABS ---
         function setTab(tab) {
+            // Strict Role Guard: Only AICTE Central Officers can access AICTE Apex
+            if (tab === 'aicte' && (!currentSession || currentSession.role !== 'AICTE_OFFICER')) {
+                tab = 'college';
+            }
+
             document.getElementById('view-college').classList.toggle('hidden', tab !== 'college');
+            document.getElementById('view-aicte').classList.toggle('hidden', tab !== 'aicte');
             document.getElementById('view-sql').classList.toggle('hidden', tab !== 'sql');
 
             // Set active pill styles in sidebar
             const collegeBtn = document.getElementById('nav-item-college');
+            const aicteBtn = document.getElementById('nav-item-aicte');
             const sqlBtn = document.getElementById('nav-item-sql');
 
             if (collegeBtn) {
                 collegeBtn.className = tab === 'college'
                     ? "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-bold transition bg-peach-100 text-peach-600 shadow-sm"
                     : "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition";
+            }
+            
+            if (aicteBtn) {
+                if (currentSession && currentSession.role === 'AICTE_OFFICER') {
+                    aicteBtn.style.display = 'flex';
+                    aicteBtn.classList.remove('hidden');
+                    aicteBtn.className = tab === 'aicte'
+                        ? "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-bold transition bg-peach-100 text-peach-600 shadow-sm"
+                        : "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl font-medium text-slate-600 hover:bg-slate-50 transition";
+                } else {
+                    // For colleges, keep strictly hidden!
+                    aicteBtn.style.display = 'none';
+                    aicteBtn.classList.add('hidden');
+                }
             }
 
             if (sqlBtn) {
@@ -978,6 +1095,9 @@
             if (tab === 'college') {
                 document.getElementById('topbar-title').innerText = "Dashboard";
                 refreshCollegeDashboard();
+            } else if (tab === 'aicte') {
+                document.getElementById('topbar-title').innerText = "AICTE Apex Oversight";
+                loadAICTEOverview();
             } else if (tab === 'sql') {
                 document.getElementById('topbar-title').innerText = "SQLite Query Explorer";
                 executeSQL();
